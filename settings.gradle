@@ -1,1 +1,2 @@
 includeBuild '../openrndr-utils/'
+includeBuild '../../kx-animation/'
