@@ -24,6 +24,9 @@ fun main() = application {
         height = HEIGHT
     }
 
+    val mouseForce = mvector(0, 0)
+    val anchorForce = mvector(0, 0)
+
     class Particle(x: Number, y: Number) {
         val position = MutableVector(x, y)
         val anchor = position.copy()
@@ -31,19 +34,19 @@ fun main() = application {
 
         fun update(mousePosition: Vector2?) {
             val mouseForce = if (mousePosition != null) {
-                val force = mvector(mousePosition.x - position.x, mousePosition.y - position.y)
-                val distanceSquared = force.squaredLength()
+                mouseForce.set(mousePosition.x - position.x, mousePosition.y - position.y)
+                val distanceSquared = mouseForce.squaredLength()
                 if (distanceSquared > 5000f || distanceSquared < 0.001f) {
                     mvector(0, 0)
                 } else {
-                    force /= distanceSquared
-                    force *= FORCE_FACTOR
-                    force
+                    mouseForce /= distanceSquared
+                    mouseForce *= FORCE_FACTOR
+                    mouseForce
                 }
             } else {
                 mvector(0, 0)
             }
-            val anchorForce = (anchor - position)
+            anchorForce.set(anchor.x - position.x, anchor.y - position.y)
             anchorForce *= SPRING
             anchorForce -= mouseForce
             velocity += anchorForce
@@ -75,7 +78,6 @@ fun main() = application {
                 it.update(mousePosition)
                 it.position.toVector2()
             }
-
             drawer.background(bgColor)
             drawer.fill = particleColor
             drawer.circles(positions, RADIUS)

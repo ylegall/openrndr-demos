@@ -26,7 +26,7 @@ fun main() = application {
 
     val bgColor  = ColorRGBa(0.23, 0.25, 0.24, 1.0)
     val particles = List(128) {
-        CurveParticle(randomVector(), randomColorRGBa(a = 1.0), (12..18).random())
+        StretchParticle(randomVector(), randomColorRGBa(a = 1.0), (12..18).random())
     }
     var clickCount = 0
 
