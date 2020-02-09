@@ -9,7 +9,7 @@ import org.ygl.openrndr.utils.isolated
 private const val SQUARES = 64
 private const val SCREEN_WIDTH = 800
 private const val SCREEN_HEIGHT = 800
-private const val SPIN_RATE = 0.1
+private const val SPIN_RATE = 0.2
 
 fun main() = application {
 
@@ -24,14 +24,14 @@ fun main() = application {
             val color: ColorRGBa
     )
 
-    val bgColor = color(255, 127, 0)
+    val bgColor = color(255, 107, 0)
 
     val squares = (1 .. SQUARES).map {
 
         val color = color(
                 255 * (it/SQUARES.toDouble()),
-                64 + SQUARES - it,
-                255 * (1 - it/SQUARES.toDouble())
+                55 + SQUARES - it,
+                250 * (1 - it/SQUARES.toDouble())
         )
 
         val squareWidth = (SCREEN_WIDTH) * (it/SQUARES.toDouble())
@@ -44,8 +44,10 @@ fun main() = application {
     var totalTime = 0.0
 
     program {
+
         extend {
             drawer.background(bgColor)
+            drawer.stroke = ColorRGBa.BLUE
             totalTime = (SPIN_RATE * deltaTime + totalTime) % 360
 
             drawer.translate(width/2.0, width/2.0)
@@ -55,7 +57,7 @@ fun main() = application {
                     fill = it.color
                     rotate(totalTime * it.spinSpeed)
                     translate(-it.width/2.0, -it.width/2.0)
-                    shape(Rectangle(0.0, 0.0, it.width, it.width).shape)
+                    drawer.rectangle(0.0, 0.0, it.width, it.width)
                 }
             }
         }
