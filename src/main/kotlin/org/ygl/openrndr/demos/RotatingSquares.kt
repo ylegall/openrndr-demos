@@ -1,10 +1,10 @@
 package org.ygl.openrndr.demos
 
 import org.openrndr.application
-import org.openrndr.color.ColorRGBa
-import org.openrndr.shape.Rectangle
 import org.ygl.openrndr.utils.color
 import org.ygl.openrndr.utils.isolated
+import kotlin.math.PI
+import kotlin.math.cos
 
 private const val SQUARES = 64
 private const val SCREEN_WIDTH = 800
@@ -20,20 +20,17 @@ fun main() = application {
 
     class Square(
             val width: Double,
-            val spinSpeed: Double,
-            val color: ColorRGBa
+            val spinSpeed: Double
     )
 
     val squares = (1 .. SQUARES).map {
         val percent = it / SQUARES.toDouble()
-        val color = color(255 * percent, 43 + SQUARES - it, 250 * (1 - percent))
         val squareWidth = SCREEN_WIDTH * percent
+        Square(squareWidth, (SCREEN_WIDTH / 2.0 - squareWidth / 2.0))
 
-        Square(squareWidth, (SCREEN_WIDTH / 2.0 - squareWidth / 2.0), color)
     }.reversed()
 
     val bgColor = color(255, 107, 0)
-    val strokeColor = color(16, 4, 222)
     var totalTime = 0.0
 
     program {
@@ -41,12 +38,14 @@ fun main() = application {
         extend {
             totalTime = (SPIN_RATE * deltaTime + totalTime) % 360
             drawer.background(bgColor)
-            drawer.stroke = strokeColor
             drawer.translate(width / 2.0, width / 2.0)
 
-            squares.forEach {
+            squares.forEachIndexed { idx, it ->
                 drawer.isolated {
-                    fill = it.color
+                    val offset = (PI * 360 * (idx / SQUARES.toDouble())) / 180
+                    val colorOffset = 255 * (1 + cos(totalTime + offset)) / 2
+                    fill = color(colorOffset, 43 + SQUARES - idx, 255 - colorOffset)
+                    stroke = color(255 - colorOffset, 43 + SQUARES - idx, colorOffset)
                     rotate(totalTime * it.spinSpeed)
                     translate(-it.width / 2.0, -it.width / 2.0)
                     drawer.rectangle(0.0, 0.0, it.width, it.width)
