@@ -7,6 +7,7 @@ import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.BoxBlur
 import org.openrndr.extra.fx.color.ChromaticAberration
+import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.shape.LineSegment
 import org.ygl.openrndr.demos.util.RingBuffer
 import org.ygl.openrndr.utils.color
@@ -17,7 +18,8 @@ import kotlin.math.sin
 private const val WIDTH = 800
 private const val HEIGHT = WIDTH
 private const val SEGMENTS = 32
-private const val GAP = 0.1
+private const val GAP = 0.05
+private const val SPEED = 1.9
 
 private fun x1(dt: Double) = WIDTH/2.3 * cos(dt) + 47 * sin(dt * 2.3)
 
@@ -41,10 +43,10 @@ fun main() = application {
         val composite = compose {
             draw {
                 for (i in 0 until SEGMENTS) {
-                    val x1 = x1(seconds + (i * GAP))
-                    val y1 = y1(seconds + (i * GAP))
-                    val x2 = x2(seconds + (i * GAP))
-                    val y2 = y2(seconds + (i * GAP))
+                    val x1 = x1(seconds * SPEED + (i * GAP))
+                    val y1 = y1(seconds * SPEED + (i * GAP))
+                    val x2 = x2(seconds * SPEED + (i * GAP))
+                    val y2 = y2(seconds * SPEED + (i * GAP))
                     segments.add(LineSegment(x1, y1, x2, y2))
                 }
 
@@ -69,8 +71,12 @@ fun main() = application {
             }
         }
 
+        extend(ScreenRecorder())
         extend {
             composite.draw(drawer)
+            if (frameCount > 200) {
+                application.exit()
+            }
         }
     }
 }
