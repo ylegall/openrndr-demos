@@ -63,6 +63,6 @@ dependencies {
     // replace the following with functional slf4j library when using slf4j
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 
-    implementation 'org.ygl:openrndr-utils:0.0.5'
+    implementation 'org.ygl:openrndr-utils:0.0.6'
     implementation 'org.ygl:kx-animation:0.0.2'
 }

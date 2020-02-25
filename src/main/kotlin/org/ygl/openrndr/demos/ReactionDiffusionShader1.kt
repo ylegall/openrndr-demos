@@ -3,6 +3,7 @@ package org.ygl.openrndr.demos
 import org.openrndr.KeyModifier
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
+import org.openrndr.draw.loadFont
 import org.openrndr.draw.renderTarget
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.compositor.compose
@@ -21,10 +22,10 @@ private const val HEIGHT = 800
 private const val START_POINTS = 7
 private const val START_SIZE = 27
 
-private const val INITIAL_FEED = 0.0343 // 0.4
-private const val INITIAL_KILL = 0.0643 //0.0624 // 0.6
-private const val INITIAL_DA = 0.436 //0.436
-private const val INITIAL_DB = 0.209 //0.109
+private const val INITIAL_FEED = 0.0343 //
+private const val INITIAL_KILL = 0.0653 //
+private const val INITIAL_DA = 0.436 //
+private const val INITIAL_DB = 0.156 //
 
 
 fun main() = application {
@@ -49,6 +50,8 @@ fun main() = application {
 
         var prev = buffer2
         var curr = buffer1
+
+        val font = loadFont("/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf", 128.0)
 
         fun resetParams() {
             feed = INITIAL_FEED
@@ -131,6 +134,12 @@ fun main() = application {
 
         val composite = compose {
             draw {
+                drawer.isolatedWithTarget(prev) {
+                    drawer.fontMap = font
+                    drawer.fill = ColorRGBa.RED
+                    text("Indeed", width/2.0 - 164, height / 2.0 + 48)
+                }
+
                 drawer.isolatedWithTarget(curr) {
                     shadeStyle = shadeStyle {
                         fragmentTransform = """
@@ -206,7 +215,7 @@ fun main() = application {
                 curr.colorBuffer(0).copyTo(prev.colorBuffer(0))
                 swapBuffers()
             }
-//            post(GaussianBloom())
+            // post(GaussianBloom())
         }
 
 //        extend(ScreenRecorder()) {

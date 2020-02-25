@@ -15,3 +15,6 @@ gradle-app.setting
 
 *.mp4
 /video/
+ShaderError.txt
+ffmpegOutput.txt
+
