@@ -12,15 +12,6 @@ import java.util.BitSet
 
 
 /*
-https://coolors.co/a7f2eb-97e5e2-8590a0-5d557f-4e2568
-A6F1C5
-96E5BB
-849DA0
-55627F
-2D2568
-*/
-
-/*
 https://coolors.co/47638e-648cb7-b4c4be-ccaf92-ea8760
 47638E
 648CB7
@@ -37,6 +28,7 @@ private const val MAX_RADIUS = 32.0
 private const val GROWTH_SPEED = 4.0
 
 val bgColor = ColorRGBa.fromHex(0x47638E)
+
 private val colorMap = ColorMap(listOf(
         ColorRGBa.fromHex(0x648CB7),
         ColorRGBa.fromHex(0xB4C4BE),
@@ -51,9 +43,6 @@ fun main() = application {
         height = HEIGHT
     }
 
-    /**
-     *
-     */
     data class MutableCircle(
             val pos: Vector2
     ) {
@@ -66,7 +55,6 @@ fun main() = application {
     class CircleGrid
     {
         val allCircles = mutableSetOf<MutableCircle>()
-//        val allCircles = mutableMapOf<Double, MutableSet<MutableCircle>>()
         val openTiles = mutableSetOf<Pair<Int, Int>>()
         val closedTiles = Array(HEIGHT) { BitSet(WIDTH) }
 
@@ -86,11 +74,9 @@ fun main() = application {
 
         fun addCircle(circle: MutableCircle) {
             allCircles.add(circle)
-//            allCircles.getOrPut(circle.radius) { mutableSetOf() }.add(circle)
         }
 
         fun update(dt: Double) {
-//            allCircles.entries.forEach { (radius, circles) ->
             allCircles.filter { it.isGrowing }.forEach { circle ->
                 val beforePoints = getBoundingBoxPoints(circle)
                 circle.radius = (circle.radius + GROWTH_SPEED * dt)
@@ -107,10 +93,6 @@ fun main() = application {
         }
 
         fun draw(drawer: Drawer) {
-//            allCircles.forEach {
-//                drawer.fill = colorMap[it.radius / MAX_RADIUS]
-//                drawer.circle(it.pos, it.radius)
-//            }
             allCircles.groupBy { it.radius }.forEach { (radius, circles) ->
                 drawer.fill = colorMap[radius / MAX_RADIUS]
                 drawer.circles(circles.map { it.pos }, radius)
