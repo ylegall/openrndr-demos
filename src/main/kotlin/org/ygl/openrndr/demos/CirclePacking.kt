@@ -33,7 +33,7 @@ private const val WIDTH = 800
 private const val HEIGHT = 800
 private const val CIRCLES_PER_FRAME = 2
 private const val INITIAL_RADIUS = 1.0
-private const val MAX_RADIUS = 48.0
+private const val MAX_RADIUS = 32.0
 private const val GROWTH_SPEED = 4.0
 
 val bgColor = ColorRGBa.fromHex(0x47638E)
