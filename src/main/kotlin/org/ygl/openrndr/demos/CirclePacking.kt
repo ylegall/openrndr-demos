@@ -5,10 +5,10 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
+import org.openrndr.math.Vector2
 import org.ygl.openrndr.utils.ColorMap
-import kotlin.math.pow
-import kotlin.math.sqrt
-import kotlin.random.Random
+import org.ygl.openrndr.utils.distanceFrom
+import java.util.BitSet
 
 
 /*
@@ -20,79 +20,146 @@ A6F1C5
 2D2568
 */
 
-private const val CIRCLES_PER_FRAME = 3
-private const val MAX_RADIUS = 88.0
-private const val GROWTH_SPEED = 0.2
-private const val MAX_ATTEMPTS = 17
+/*
+https://coolors.co/47638e-648cb7-b4c4be-ccaf92-ea8760
+47638E
+648CB7
+B4C4BE
+CCAF92
+EA8760
+*/
+
+private const val WIDTH = 800
+private const val HEIGHT = 800
+private const val CIRCLES_PER_FRAME = 2
+private const val INITIAL_RADIUS = 1.0
+private const val MAX_RADIUS = 48.0
+private const val GROWTH_SPEED = 4.0
+
+val bgColor = ColorRGBa.fromHex(0x47638E)
+private val colorMap = ColorMap(listOf(
+        ColorRGBa.fromHex(0x648CB7),
+        ColorRGBa.fromHex(0xB4C4BE),
+        ColorRGBa.fromHex(0xCCAF92),
+        ColorRGBa.fromHex(0xEA8760)
+))
 
 fun main() = application {
 
     configure {
-        width = 800
-        height = 800
+        width = WIDTH
+        height = HEIGHT
     }
 
-    val colorMap = ColorMap(listOf(
-            ColorRGBa.fromHex(0x2A9D8F),
-            ColorRGBa.fromHex(0xE9C46A),
-            ColorRGBa.fromHex(0xF4A261),
-            ColorRGBa.fromHex(0xE76F51)
-    ))
-
-    class MutableCircle(
-            val x: Double,
-            val y: Double,
-            var radius: Double,
-            var growing: Boolean
+    /**
+     *
+     */
+    data class MutableCircle(
+            val pos: Vector2
     ) {
-        fun overlaps(circle: MutableCircle): Boolean {
-            val distance = distance(circle.x, circle.y)
-            return distance > 0 && distance < (radius + circle.radius)
+        var radius: Double = INITIAL_RADIUS
+        var isGrowing: Boolean = true
+    }
+
+    fun <T: Number> mutableCircle(x: T, y: T) = MutableCircle(Vector2(x.toDouble(), y.toDouble()))
+
+    class CircleGrid
+    {
+        val allCircles = mutableSetOf<MutableCircle>()
+//        val allCircles = mutableMapOf<Double, MutableSet<MutableCircle>>()
+        val openTiles = mutableSetOf<Pair<Int, Int>>()
+        val closedTiles = Array(HEIGHT) { BitSet(WIDTH) }
+
+        val pointCache = object: LinkedHashMap<Double, Collection<Pair<Int, Int>>>() {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Double, Collection<Pair<Int, Int>>>?): Boolean {
+                return this.size > 64
+            }
         }
 
-        fun contains(x1: Double, y1: Double) = distance(x1, y1) < radius
+        init {
+            for (y in 0 until HEIGHT) {
+                for (x in 0 until WIDTH) {
+                    openTiles.add(x to y)
+                }
+            }
+        }
+
+        fun addCircle(circle: MutableCircle) {
+            allCircles.add(circle)
+//            allCircles.getOrPut(circle.radius) { mutableSetOf() }.add(circle)
+        }
 
         fun update(dt: Double) {
-            if (growing) {
-                radius = (radius + GROWTH_SPEED * dt).coerceAtMost(MAX_RADIUS)
-                if (radius >= MAX_RADIUS) {
-                    growing = false
+//            allCircles.entries.forEach { (radius, circles) ->
+            allCircles.filter { it.isGrowing }.forEach { circle ->
+                val beforePoints = getBoundingBoxPoints(circle)
+                circle.radius = (circle.radius + GROWTH_SPEED * dt)
+                val coveredPoints = getBoundingBoxPoints(circle)
+                (coveredPoints - beforePoints).forEach { point ->
+                    if (closedTiles[point.second][point.first]) {
+                        circle.isGrowing = false
+                    }
+                    openTiles.remove(point)
+                    closedTiles[point.second][point.first] = true
                 }
+
             }
         }
 
         fun draw(drawer: Drawer) {
-            drawer.fill = colorMap[radius / MAX_RADIUS]
-            drawer.circle(x, y, radius)
+//            allCircles.forEach {
+//                drawer.fill = colorMap[it.radius / MAX_RADIUS]
+//                drawer.circle(it.pos, it.radius)
+//            }
+            allCircles.groupBy { it.radius }.forEach { (radius, circles) ->
+                drawer.fill = colorMap[radius / MAX_RADIUS]
+                drawer.circles(circles.map { it.pos }, radius)
+            }
         }
 
-        private fun distance(x: Double, y: Double) = sqrt((x - this.x).pow(2) + (y - this.y).pow(2))
+        private fun getBoundingBoxPoints(circle: MutableCircle): List<Pair<Int, Int>> {
+            var points = pointCache[circle.radius]
+
+            if (points == null) {
+                val min = -circle.radius.toInt()
+                val max = circle.radius.toInt()
+                points = (min .. max).flatMap { y ->
+                    (min .. max).map { x ->
+                        x to y
+                    }
+                }.filter {
+                    Vector2.ZERO.distanceFrom(it.first, it.second) <= circle.radius
+                }
+                pointCache[circle.radius] = points
+            }
+
+            return points.map { Pair(
+                    (it.first + circle.pos.x.toInt()).coerceIn(0 until WIDTH),
+                    (it.second + circle.pos.y.toInt()).coerceIn(0 until HEIGHT)
+                )
+            }
+        }
     }
 
     program {
 
-        val bgColor = ColorRGBa.fromHex(0x64653)
-        val circles = HashSet<MutableCircle>()
+        val circleGrid = CircleGrid()
         var circleLimitReached = false
 
         fun newCircle(): MutableCircle? {
-            var attempts = 0
-            while (attempts < MAX_ATTEMPTS) {
-                val x = Random.nextDouble(width.toDouble())
-                val y = Random.nextDouble(height.toDouble())
-                if (circles.none { it.contains(x, y) }) {
-                    return MutableCircle(x, y, 1.0, true)
-                }
-                attempts++
+            return if (circleGrid.openTiles.isNotEmpty()) {
+                val (x, y) = circleGrid.openTiles.random()
+                mutableCircle(x, y)
+            } else {
+                null
             }
-            return null
         }
 
         fun addNewCircles(numCircles: Int) {
             repeat(numCircles) {
                 val circle = newCircle()
                 if (circle != null) {
-                    circles.add(circle)
+                    circleGrid.addCircle(circle)
                 } else {
                     circleLimitReached = true
                     println("circle limit reached")
@@ -103,20 +170,14 @@ fun main() = application {
 
         val composite = compose {
             draw {
-
                 if (!circleLimitReached) {
                     addNewCircles(CIRCLES_PER_FRAME)
                 }
-
                 drawer.background(bgColor)
                 drawer.stroke = null
-                circles.forEach { circle ->
-                    if (circles.any { circle.overlaps(it) }) {
-                        circle.growing = false
-                    }
-                    circle.update(seconds)
-                    circle.draw(drawer)
-                }
+                drawer.strokeWeight = 0.0
+                circleGrid.update(deltaTime)
+                circleGrid.draw(drawer)
             }
         }
 
