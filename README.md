@@ -11,4 +11,12 @@ color paletts:
 * https://coolors.co/103251-147f61-64c986-a9d1aa-e0daba
 * https://coolors.co/a7f2eb-97e5e2-8590a0-5d557f-4e2568
 
+# Resources
+* [Etienne Jacob twitter](https://twitter.com/etiennejcb)
+* [Etienne Jacob tumblr](https://necessary-disorder.tumblr.com/)
+* [Etienne Jacob blog](https://necessarydisorder.wordpress.com/)
+* [Coding train youtube](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
+* [OPENRNDR GUIDE](https://guide.openrndr.org/#/)
+* [Davide Whyte](http://beesandbombs.com/)
+
 © 2020 Yann Le Gall

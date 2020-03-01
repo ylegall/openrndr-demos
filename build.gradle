@@ -4,7 +4,7 @@ plugins {
 }
 
 ext.openrndrVersion = "0.3.39"
-ext.orxVersion = "0.3.48"
+ext.orxVersion = "0.3.49"
 
 repositories {
     mavenCentral()
@@ -63,6 +63,6 @@ dependencies {
     // replace the following with functional slf4j library when using slf4j
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 
-    implementation 'org.ygl:openrndr-utils:0.0.6'
+    implementation 'org.ygl:openrndr-utils:0.0.7'
     implementation 'org.ygl:kx-animation:0.0.2'
 }
