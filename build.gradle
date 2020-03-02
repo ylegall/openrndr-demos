@@ -55,6 +55,7 @@ dependencies {
     implementation "org.openrndr.extra:orx-camera:$orxVersion"
     implementation "org.openrndr.extra:orx-compositor:$orxVersion"
     implementation "org.openrndr.extra:orx-shade-styles:$orxVersion"
+    implementation "org.openrndr.extra:orx-noise:$orxVersion"
 
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
