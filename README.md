@@ -18,5 +18,6 @@ color paletts:
 * [Coding train youtube](https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw)
 * [OPENRNDR GUIDE](https://guide.openrndr.org/#/)
 * [Davide Whyte](http://beesandbombs.com/)
+* [Drawing Vector Fields](https://generateme.wordpress.com/2016/04/24/drawing-vector-field/)
 
 © 2020 Yann Le Gall

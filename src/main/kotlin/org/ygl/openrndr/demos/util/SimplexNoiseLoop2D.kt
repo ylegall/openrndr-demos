@@ -22,7 +22,7 @@ fun simplexNoise2D(
     return simplex(seed, x, y)
 }
 
-class FastSimplexNoise4D(seed: Int) {
+class FastSimplexNoise4D(seed: Int = 1337) {
     private val fastNoise = FastNoise(seed)
 
     init {
