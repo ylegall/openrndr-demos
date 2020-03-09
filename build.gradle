@@ -65,5 +65,6 @@ dependencies {
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 
     implementation 'org.ygl:openrndr-utils:0.0.7'
+    implementation 'org.ygl:fast-noise-kotlin:0.0.1'
     implementation 'org.ygl:kx-animation:0.0.2'
 }
