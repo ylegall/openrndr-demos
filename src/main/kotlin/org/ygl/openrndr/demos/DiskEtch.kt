@@ -46,7 +46,7 @@ fun main() = application {
         val ringSegments = List(RINGS) { mutableListOf<Pair<Double, Double>>() }
 
         fun computeSegments() {
-            val image = loadImage("data/yin-yang.png")
+            val image = loadImage("data/images/yin-yang.png")
             val shadow = image.shadow.also { it.download() }
 
             for (ring in 0 until RINGS) {
