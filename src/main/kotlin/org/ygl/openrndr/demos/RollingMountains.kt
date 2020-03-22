@@ -127,7 +127,6 @@ fun main() = application {
                     }
 
                     drawer.strokeWeight = layerProgress.rangeMap(0, 1, 0.5, 1.8)
-                    //val alpha = layerProgress.rangeMap(0, 1, 0.4, 0.9)
                     drawer.stroke = colorMap[layerProgress]//.opacify(alpha)
                     drawer.contour(curve)
                 }

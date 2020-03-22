@@ -53,7 +53,7 @@ fun main() = application {
             return points.also { println(it.size) }
         }
 
-        val background = loadImage("data/mouth2.png")
+        val background = loadImage("data/images/mouth2.png")
         val startPoints = findStartPoints(background).sortedBy { it.x }
 
         val noise = FastNoise()
@@ -123,14 +123,14 @@ fun main() = application {
             }
         }
 
-//        extend(ScreenRecorder()) {
-//            frameRate = 60
-//            frameClock = true
-//        }
+        // extend(ScreenRecorder()) {
+        //     frameRate = 60
+        //     frameClock = true
+        // }
 
         extend(GUI()) {
             add(parameters)
-            loadParameters(File("data/curtain-mouth-noise-params.json"))
+            loadParameters(File("data/settings/curtain-mouth-noise-params.json"))
         }
 
         extend {
@@ -138,9 +138,9 @@ fun main() = application {
             drawer.translate(width/2.0, 0.0)
             composite.draw(drawer)
 
-//            if (frameCount >= TOTAL_FRAMES) {
-//                application.exit()
-//            }
+            // if (frameCount >= TOTAL_FRAMES) {
+            //     application.exit()
+            // }
         }
     }
 }

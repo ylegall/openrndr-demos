@@ -2,7 +2,7 @@ package org.ygl.openrndr.demos
 
 import org.openrndr.application
 import org.openrndr.math.Vector2
-import org.ygl.openrndr.utils.MutableVector
+import org.ygl.openrndr.utils.MutableVector2
 import org.ygl.openrndr.utils.color
 import org.ygl.openrndr.utils.mvector
 
@@ -28,9 +28,9 @@ fun main() = application {
     val anchorForce = mvector(0, 0)
 
     class Particle(x: Number, y: Number) {
-        val position = MutableVector(x, y)
+        val position = MutableVector2(x, y)
         val anchor = position.copy()
-        val velocity = MutableVector(0, 0)
+        val velocity = MutableVector2(0, 0)
 
         fun update(mousePosition: Vector2?) {
             val mouseForce = if (mousePosition != null) {

@@ -1,7 +1,8 @@
 package org.ygl.openrndr.demos.util
 
-import fastnoise.FastNoise
 import org.openrndr.extra.noise.simplex
+import org.ygl.fastnoise.FastNoise
+import org.ygl.fastnoise.NoiseType
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -26,7 +27,20 @@ class FastSimplexNoise4D(seed: Int = 1337) {
     private val fastNoise = FastNoise(seed)
 
     init {
-        fastNoise.SetNoiseType(FastNoise.NoiseType.Simplex)
+        fastNoise.noiseType = NoiseType.SIMPLEX
+    }
+
+    fun simplexNoise2D(
+            progress: Double,
+            timeOffset: Double = 0.0,
+            radius: Double = 1.0,
+            xOffset: Double = 0.0,
+            yOffset: Double = 0.0
+    ): Double {
+        val radians = TWO_PI * (progress - timeOffset)
+        val x = xOffset + radius * cos(radians)
+        val y = yOffset + radius * sin(radians)
+        return fastNoise.getSimplex(x.toFloat(), y.toFloat()).toDouble()
     }
 
     fun simplexNoise4D(
@@ -41,7 +55,7 @@ class FastSimplexNoise4D(seed: Int = 1337) {
         val radians = TWO_PI * (progress - timeOffset)
         val z = zOffset + radius * cos(radians)
         val w = wOffset + radius * sin(radians)
-        return fastNoise.GetSimplex(x, y, z, w)
+        return fastNoise.getSimplex(x, y, z, w)
     }
 }
 

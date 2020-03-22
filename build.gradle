@@ -56,6 +56,7 @@ dependencies {
     implementation "org.openrndr.extra:orx-compositor:$orxVersion"
     implementation "org.openrndr.extra:orx-shade-styles:$orxVersion"
     implementation "org.openrndr.extra:orx-noise:$orxVersion"
+    implementation "org.openrndr.extra:orx-gui:$orxVersion"
 
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
@@ -64,7 +65,7 @@ dependencies {
     // replace the following with functional slf4j library when using slf4j
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 
-    implementation 'org.ygl:openrndr-utils:0.0.7'
-    implementation 'org.ygl:fast-noise-kotlin:0.0.1'
+    implementation 'org.ygl:openrndr-utils:0.0.8'
+    implementation 'org.ygl:fast-noise-kotlin:0.0.2'
     implementation 'org.ygl:kx-animation:0.0.2'
 }
