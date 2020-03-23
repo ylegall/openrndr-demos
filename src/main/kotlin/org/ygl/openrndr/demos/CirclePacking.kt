@@ -183,7 +183,7 @@ fun main() = application {
             }
         }
 
-        //extend(ScreenRecorder())
+        extend(ScreenRecorder())
         extend {
             composite.draw(drawer)
             if (frameCount % 100 == 0) {

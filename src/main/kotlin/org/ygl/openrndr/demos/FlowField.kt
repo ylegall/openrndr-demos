@@ -16,7 +16,6 @@ import org.ygl.openrndr.utils.rangeMap
 import org.ygl.openrndr.utils.vector2
 import java.io.File
 import kotlin.math.PI
-import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.random.Random
