@@ -2,30 +2,35 @@ package org.ygl.openrndr.demos
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.draw.Drawer
+import org.openrndr.draw.isolatedWithTarget
+import org.openrndr.draw.renderTarget
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.FrameBlur
-import org.openrndr.extra.noise.simplex
-import org.openrndr.ffmpeg.ScreenRecorder
+import org.openrndr.extra.fx.blur.GaussianBloom
+import org.openrndr.extra.gui.GUI
+import org.openrndr.extra.parameters.Description
+import org.openrndr.extra.parameters.DoubleParameter
+import org.openrndr.extras.camera.OrbitalCamera
+import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.math.Vector2
-import org.ygl.openrndr.demos.util.simplexNoise2D
-import org.ygl.openrndr.utils.isolated
+import org.openrndr.math.Vector3
+import org.ygl.fastnoise.FastNoise
 import org.ygl.openrndr.utils.rangeMap
-import org.ygl.openrndr.utils.vector2
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
+private const val WIDTH = 920
+private const val HEIGHT = 920
+private const val SPIRAL_ARMS = 16
+private const val PATH_POINTS = 1024
 private const val TOTAL_FRAMES = 360
-private const val FRAME_PERIODS = 1.0
-private const val CURVE_POINTS = 2048
-
+private const val DELAY_FRAMES = TOTAL_FRAMES / 4
+private const val RECORDING = true
 
 fun main() = application {
 
@@ -34,80 +39,124 @@ fun main() = application {
         height = HEIGHT
     }
 
-    val bgColor = ColorRGBa(0.0, 0.0, 0.0)
-    val particleColor = ColorRGBa.WHITE
-
-    fun getCurvePosition(progress: Double, timeOffset: Double = 0.0): Vector2 {
-        val rads = PI * (progress - timeOffset)
-        val mag = sin(rads * 3.0)
-        val x = WIDTH/2.0 * cos(rads) * mag
-        val y = HEIGHT/2.0 * sin(rads) * mag
-        return vector2(x, y)
-    }
-
-    class SmokeSegment(
-            private val start: Double = 0.0,
-            private val length: Double = 1.0,
-            private val points: Int = (length * CURVE_POINTS * 2).toInt()
-    ) {
-        private val seedX = 451
-        private val seedY = 672
-
-        fun draw(drawer: Drawer, frameCount: Int) = drawer.isolated {
-            val timeOffset = (frameCount * FRAME_PERIODS) / TOTAL_FRAMES.toDouble()
-            for (i in 0 until points) {
-                val progress = (i / points.toDouble())
-                val curvePosition = start + length * progress
-//                val position = getCurvePosition(curveProgress, timeOffset)
-                val position = getCurvePosition(curvePosition, 0.0)
-                val distortion = 10.0 * progress
-                val dx = 16 * simplexNoise2D(seedX, progress, timeOffset, distortion)
-                val dy = 16 * simplexNoise2D(seedY, progress, timeOffset, distortion)
-
-                val opacity = abs(0.4 - progress).rangeMap(0.0, 0.6, 1.0, 0.0)
-
-                stroke = null
-                fill = particleColor.opacify(opacity)
-                drawer.circle(position.x + dx, position.y + dy, 3.0)
-            }
-        }
-    }
-
     program {
 
-//        val segments = List(1) {
-//            SmokeSegment( 0.0, 1.0, CURVE_POINTS)
-//        }
+        val camera = OrbitalCamera(eye = Vector3(0.0, 0.0, -800.0), lookAt = Vector3(0.0, 10.0, 1.0))
 
-        val segments = listOf(
-                SmokeSegment(0.00, 0.3),
-                SmokeSegment(0.15, 0.3),
-                SmokeSegment(0.30, 0.3),
-                SmokeSegment(0.45, 0.3),
-                SmokeSegment(0.60, 0.3),
-                SmokeSegment(0.75, 0.3),
-                SmokeSegment(0.90, 0.3)
-        )
+        val params = @Description("params") object {
+            @DoubleParameter("noise radius", 1.0, 200.0)
+            var noiseRadius = 10.0
+            @DoubleParameter("noise scale", 0.1, 10.0)
+            var noiseScale = 0.87
+            @DoubleParameter("noise magnitude", 1.0, 200.0)
+            var magnitude = 32.0
+        }
+
+        val fgColor = ColorRGBa.fromHex(0xBAFF29)
+        val bgColor = ColorRGBa.fromHex(0x0D0221)
+
+        val noise = FastNoise()
+        val videoTarget = renderTarget(width, height) { colorBuffer() }
+        val videoWriter = VideoWriter.create()
+                .size(width, height)
+                .frameRate(60)
+                .output("video/smoke-helix.mp4")
+                .start()
+
+        val angleOffsets = List(SPIRAL_ARMS) { Random.nextDouble() }
+        val pathPoints = MutableList(PATH_POINTS) { Vector2.ZERO }
+
+        fun computePathPoints(
+                time: Double,
+                pathIndex: Int
+        ) {
+            val angleOffset = angleOffsets[pathIndex]
+            for (i in 0 until PATH_POINTS) {
+                val pathProgress = i / PATH_POINTS.toDouble()
+                //val easedProgress = (1 - (1 - pathProgress).pow(2))
+                val easedProgress = pathProgress.pow(0.5)
+                val radius = pathProgress.pow(2).rangeMap(0, 1, 0, 200)
+                val angle = 4 * PI * (pathProgress - time + angleOffset)
+                val x0 = radius * cos(angle)
+                val z0 = radius * sin(angle)
+                val y0 = easedProgress * HEIGHT - HEIGHT/1.7
+
+                val noiseScale = pathProgress * params.noiseScale
+
+                noise.seed = 31 * pathIndex
+                val dx = easedProgress * params.magnitude * noise.getSimplex(
+                        x = x0 * noiseScale + params.noiseRadius * cos(2 * PI * time),
+                        y = y0 * noiseScale + params.noiseRadius * sin(2 * PI * time)
+                )
+                noise.seed = 97 * pathIndex
+                val dy = easedProgress * params.magnitude * noise.getSimplex(
+                        x = x0 * noiseScale + params.noiseRadius * cos(2 * PI * time),
+                        y = y0 * noiseScale + params.noiseRadius * sin(2 * PI * time)
+                )
+                noise.seed = 153 * pathIndex
+                val dz = easedProgress * params.magnitude * noise.getSimplex(
+                        x = params.noiseRadius * cos(2 * PI * time),
+                        y = params.noiseRadius * sin(2 * PI * time)
+                )
+                //val dx = 0.0
+                //val dz = 0.0
+
+                val z = z0 + dz
+                val distanceFactor = 800 / (600 + z)
+                val x = x0 * distanceFactor
+                val y = y0 * distanceFactor
+
+                pathPoints[i] = Vector2(x + dx, y + dy)
+            }
+        }
 
         val composite = compose {
             draw {
                 drawer.background(bgColor)
-                drawer.translate(width/2.0, height/2.0 + 20.0)
-                segments.forEach { segment ->
-                    segment.draw(drawer, frameCount)
+                //drawer.stroke = ColorRGBa.BLACK
+                //drawer.strokeWeight = 1.0
+                drawer.stroke = null
+                drawer.fill = fgColor
+
+                val time = (frameCount % TOTAL_FRAMES) / TOTAL_FRAMES.toDouble()
+
+                for (i in 0 until SPIRAL_ARMS) {
+                    //val angleOffset = i / SPIRAL_ARMS.toDouble()
+                    computePathPoints(time, i)
+
+                    for (j in pathPoints.indices) {
+                        val p = j / pathPoints.size.toDouble()
+                        drawer.fill = fgColor.opacify(1 - p)
+                        drawer.circle(pathPoints[j], 5.0)
+                    }
+                    //drawer.circles(pathPoints, 6.0)
                 }
+
             }
-            post(FrameBlur())
+            if (RECORDING) {
+                post(GaussianBloom())
+                post(FrameBlur())
+            }
         }
 
-//        extend(ScreenRecorder()) {
-//            frameRate = 60
-//            frameClock = true
-//        }
+        extend(camera)
+        //extend(OrbitalControls(camera))
+        //extend(GUI()) { add(params) }
+
         extend {
-            composite.draw(drawer)
-            if (frameCount >= TOTAL_FRAMES) {
-                application.exit()
+            if (RECORDING) {
+                if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
+                    videoWriter.stop()
+                    application.exit()
+                }
+                if (frameCount >= DELAY_FRAMES) {
+                    drawer.isolatedWithTarget(videoTarget) {
+                        composite.draw(this)
+                    }
+                    videoWriter.frame(videoTarget.colorBuffer(0))
+                }
+            } else {
+                composite.draw(drawer)
             }
         }
     }
