@@ -30,7 +30,7 @@ private const val SPIRAL_ARMS = 16
 private const val PATH_POINTS = 1024
 private const val TOTAL_FRAMES = 360
 private const val DELAY_FRAMES = TOTAL_FRAMES / 4
-private const val RECORDING = true
+private const val RECORDING = false
 
 fun main() = application {
 
@@ -41,7 +41,7 @@ fun main() = application {
 
     program {
 
-        val camera = OrbitalCamera(eye = Vector3(0.0, 0.0, -800.0), lookAt = Vector3(0.0, 10.0, 1.0))
+        val camera = OrbitalCamera(eye = Vector3(0.0, 0.0, -800.0), lookAt = Vector3.UNIT_Z)
 
         val params = @Description("params") object {
             @DoubleParameter("noise radius", 1.0, 200.0)
@@ -52,8 +52,8 @@ fun main() = application {
             var magnitude = 32.0
         }
 
-        val fgColor = ColorRGBa.fromHex(0xBAFF29)
-        val bgColor = ColorRGBa.fromHex(0x0D0221)
+        val fgColor = ColorRGBa.fromHex(0xFF9C4C)
+        val bgColor = ColorRGBa.fromHex(0x1C333D)
 
         val noise = FastNoise()
         val videoTarget = renderTarget(width, height) { colorBuffer() }
@@ -64,22 +64,24 @@ fun main() = application {
                 .start()
 
         val angleOffsets = List(SPIRAL_ARMS) { Random.nextDouble() }
+        val signs = List(SPIRAL_ARMS) { if (Random.nextBoolean()) 1 else -1 }
         val pathPoints = MutableList(PATH_POINTS) { Vector2.ZERO }
 
         fun computePathPoints(
                 time: Double,
-                pathIndex: Int
+                pathIndex: Int,
+                sign: Int
         ) {
             val angleOffset = angleOffsets[pathIndex]
             for (i in 0 until PATH_POINTS) {
                 val pathProgress = i / PATH_POINTS.toDouble()
                 //val easedProgress = (1 - (1 - pathProgress).pow(2))
-                val easedProgress = pathProgress.pow(0.5)
+                val easedProgress = pathProgress//.pow(2)
                 val radius = pathProgress.pow(2).rangeMap(0, 1, 0, 200)
                 val angle = 4 * PI * (pathProgress - time + angleOffset)
-                val x0 = radius * cos(angle)
-                val z0 = radius * sin(angle)
-                val y0 = easedProgress * HEIGHT - HEIGHT/1.7
+                val x0 = radius * cos(sign * angle)
+                val z0 = radius * sin(sign * angle)
+                val y0 = sign * (easedProgress * HEIGHT * 0.7)
 
                 val noiseScale = pathProgress * params.noiseScale
 
@@ -117,18 +119,20 @@ fun main() = application {
                 //drawer.strokeWeight = 1.0
                 drawer.stroke = null
                 drawer.fill = fgColor
+                drawer.rotate(45.0)
 
                 val time = (frameCount % TOTAL_FRAMES) / TOTAL_FRAMES.toDouble()
 
                 for (i in 0 until SPIRAL_ARMS) {
                     //val angleOffset = i / SPIRAL_ARMS.toDouble()
-                    computePathPoints(time, i)
+                    computePathPoints(time, i, signs[i])
 
                     for (j in pathPoints.indices) {
                         val p = j / pathPoints.size.toDouble()
                         drawer.fill = fgColor.opacify(1 - p)
                         drawer.circle(pathPoints[j], 5.0)
                     }
+
                     //drawer.circles(pathPoints, 6.0)
                 }
 
