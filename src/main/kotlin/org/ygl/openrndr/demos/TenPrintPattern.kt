@@ -5,9 +5,6 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.LineCap
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
-import org.openrndr.extra.compositor.post
-import org.openrndr.extra.fx.blur.BoxBlur
-import org.openrndr.extra.fx.color.ChromaticAberration
 import org.openrndr.extra.shadestyles.linearGradient
 import org.ygl.kxa.Animatable
 import org.ygl.kxa.EmptyAnimation
@@ -15,7 +12,6 @@ import org.ygl.kxa.ManualUpdateAnimationManager
 import org.ygl.kxa.parallelAnimation
 import org.ygl.kxa.util.millis
 import org.ygl.openrndr.utils.color
-import kotlin.math.sin
 import kotlin.random.Random
 
 
@@ -25,8 +21,8 @@ private const val SPEED = 1.0
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     class MutableLineSegment(

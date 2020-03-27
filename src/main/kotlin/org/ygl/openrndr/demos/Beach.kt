@@ -31,8 +31,8 @@ private const val PERIODS = 2.5
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -46,8 +46,8 @@ fun main() = application {
 
         fun computeCurve(frameProgress: Double) = contour {
             val time = sin(2 * PI * frameProgress)
-            for (x in -100 until Configuration.Width + 100) {
-                val pathProgress = x / Configuration.Width.toDouble()
+            for (x in -100 until Configuration.width + 100) {
+                val pathProgress = x / Configuration.width.toDouble()
                 val angle = PERIODS * 2 * PI * (pathProgress - frameProgress/2)
                 val y = time * MAX_AMPLITUDE * sin(angle)
                 moveOrLineTo(x.toDouble(), y)
@@ -67,9 +67,9 @@ fun main() = application {
                         ColorRGBa.fromHex(0xC7EFCF),
                         ColorRGBa.fromHex(0xF4F1BB)
                 )
-                drawer.rectangle(0.0, 0.0, Configuration.Width.toDouble(), Configuration.Height.toDouble())
+                drawer.rectangle(0.0, 0.0, Configuration.width.toDouble(), Configuration.height.toDouble())
             }
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 //post(FrameBlur())
             }
 
@@ -85,8 +85,8 @@ fun main() = application {
                         drawer.rectangle(
                                 BORDER,
                                 BORDER,
-                                Configuration.Width - 2 * BORDER,
-                                Configuration.Height - 2 * BORDER
+                                Configuration.width - 2 * BORDER,
+                                Configuration.height - 2 * BORDER
                         )
                     }
                 }
@@ -104,7 +104,7 @@ fun main() = application {
 
                         var xShiftIndex = 0
                         var baseY = -20.0
-                        while (baseY <= Configuration.Height + 20) {
+                        while (baseY <= Configuration.height + 20) {
                             val dx = xOffsets[xShiftIndex]
                             drawer.isolated {
                                 translate(dx, baseY)
@@ -123,7 +123,7 @@ fun main() = application {
         //}
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

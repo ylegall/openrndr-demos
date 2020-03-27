@@ -26,23 +26,23 @@ private const val NOISE_RADIUS = 44.3
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
 
-        val videoTarget = renderTarget(Configuration.Width, Configuration.Height) { colorBuffer() }
+        val videoTarget = renderTarget(Configuration.width, Configuration.height) { colorBuffer() }
         val videoWriter = VideoWriter.create()
-                .size(Configuration.Width, Configuration.Height)
+                .size(Configuration.width, Configuration.height)
                 .frameRate(60)
                 .start()
 
         val noise = FastSimplexNoise4D(451)
 //        val noise = FastNoise()
         val fgColor = ColorRGBa.fromHex(0xFCC8B2).opacify(0.9)
-        val screen = rect(0, 0, Configuration.Width, Configuration.Height).let { it.moved(-it.center) }
-        val bounds = rect(0, 0, Configuration.Width - 235, Configuration.Height - 235).let { it.moved(-it.center) }
+        val screen = rect(0, 0, Configuration.width, Configuration.height).let { it.moved(-it.center) }
+        val bounds = rect(0, 0, Configuration.width - 235, Configuration.height - 235).let { it.moved(-it.center) }
 
         val frame = compound {
             difference {
@@ -88,11 +88,11 @@ fun main() = application {
                 drawer.fill = ColorRGBa.BLACK
                 drawer.shapes(frame)
             }
-            if (Configuration.Recording) { post(FrameBlur()) }
+            if (Configuration.recording) { post(FrameBlur()) }
         }
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     translate(width / 2.0, height / 2.0)
                     rotate(45.0)

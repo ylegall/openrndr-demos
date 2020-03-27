@@ -2,18 +2,11 @@ package org.ygl.openrndr.demos
 
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
-import org.openrndr.extra.compositor.blend
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
-import org.openrndr.extra.compositor.layer
-import org.openrndr.extra.fx.blend.Normal
-import org.openrndr.extra.shadestyles.linearGradient
-import org.openrndr.ffmpeg.MP4Profile
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.ygl.openrndr.utils.isolated
-import org.ygl.openrndr.utils.rect
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -25,8 +18,8 @@ private const val TOTAL_FRAMES = 420
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     val bgColor = ColorRGBa.fromHex(0x375267)

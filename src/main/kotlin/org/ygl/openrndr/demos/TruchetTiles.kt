@@ -26,8 +26,8 @@ private const val DELAY_FRAMES = TOTAL_FRAMES + PAUSE_FRAMES
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -36,9 +36,9 @@ fun main() = application {
         val bgColor = ColorRGBa.fromHex(0x353A47)
 
         val tileSize = TILE_SIZE.toDouble()
-        val videoTarget = renderTarget(Configuration.Width, Configuration.Height) { colorBuffer() }
+        val videoTarget = renderTarget(Configuration.width, Configuration.height) { colorBuffer() }
         val videoWriter = VideoWriter.create()
-                .size(Configuration.Width, Configuration.Height)
+                .size(Configuration.width, Configuration.height)
                 .frameRate(60)
                 .output("video/TruchetTiles.mp4")
                 .start()
@@ -58,8 +58,8 @@ fun main() = application {
                 ).random()
         )
 
-        val rotations = Array(Configuration.Height / TILE_SIZE) {
-            Array(Configuration.Width / TILE_SIZE) {
+        val rotations = Array(Configuration.height / TILE_SIZE) {
+            Array(Configuration.width / TILE_SIZE) {
                 RotationSequence(Random.nextInt(4) * 90)
             }
         }
@@ -89,8 +89,8 @@ fun main() = application {
                         Ease.EXP_INOUT((frameProgress - 0.5) * 2) / 2 + 0.5
                     }
 
-                    for (row in 0 until Configuration.Height / TILE_SIZE) {
-                        for (col in 0 until Configuration.Width / TILE_SIZE) {
+                    for (row in 0 until Configuration.height / TILE_SIZE) {
+                        for (col in 0 until Configuration.width / TILE_SIZE) {
 
                             val x = col * tileSize
                             val y = row * tileSize
@@ -120,7 +120,7 @@ fun main() = application {
         }
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

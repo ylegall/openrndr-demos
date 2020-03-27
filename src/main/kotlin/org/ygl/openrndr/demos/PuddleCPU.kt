@@ -8,14 +8,8 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.layer
-import org.openrndr.extras.camera.AxisHelper
-import org.openrndr.extras.camera.GridHelper
-import org.openrndr.extras.camera.OrbitalCamera
-import org.openrndr.extras.camera.OrbitalControls
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.math.Vector2
-import org.openrndr.math.Vector3
 import org.openrndr.math.smoothstep
 import org.ygl.openrndr.utils.distanceFrom
 import org.ygl.openrndr.utils.isolatedWithTarget
@@ -33,8 +27,8 @@ private const val MAX_RADIUS = 250
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -57,7 +51,7 @@ fun main() = application {
 
         val ripples = List(11) {
             Ripple(
-                    vector2(Random.nextInt(Configuration.Width), Random.nextInt(Configuration.Height)),
+                    vector2(Random.nextInt(Configuration.width), Random.nextInt(Configuration.height)),
                     Random.nextDouble()
             )
         }
@@ -137,7 +131,7 @@ fun main() = application {
 
                     drawer.fill = ColorRGBa.WHITE
                     drawer.stroke = null
-                    drawer.rectangle((Configuration.Width - INSET)/2.0, (Configuration.Height - INSET)/2.0, INSET.toDouble(), INSET.toDouble())
+                    drawer.rectangle((Configuration.width - INSET)/2.0, (Configuration.height - INSET)/2.0, INSET.toDouble(), INSET.toDouble())
                 }
             }
         }
@@ -149,7 +143,7 @@ fun main() = application {
 
         extend {
             colorPixels()
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

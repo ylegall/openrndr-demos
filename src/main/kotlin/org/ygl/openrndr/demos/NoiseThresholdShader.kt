@@ -30,8 +30,8 @@ private val noiseFragShader = File("data/shaders/simplexNoise4D.glsl").readText(
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -96,14 +96,14 @@ fun main() = application {
                     parameter("time", timeProgress)
                 }
 
-                drawer.rect(0, 0, Configuration.Width, Configuration.Height)
+                drawer.rect(0, 0, Configuration.width, Configuration.height)
             }
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
         }
 
-        if (Configuration.Recording) {
+        if (Configuration.recording) {
             extend(ScreenRecorder()) {
                 frameRate = 60
                 frameClock = true
@@ -113,7 +113,7 @@ fun main() = application {
         extend {
             composite.draw(drawer)
 
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES) {
                     application.exit()
                 }

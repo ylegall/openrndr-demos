@@ -36,8 +36,8 @@ private const val TOTAL_FRAMES = 360
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -93,7 +93,7 @@ fun main() = application {
                     noise.seed = 1982
                     val noiseY = noise.getSimplex(params.scale * x, params.scale * y)
 
-                    val outwardForce = mvector(x - Configuration.Width /2, y - Configuration.Height /2)
+                    val outwardForce = mvector(x - Configuration.width /2, y - Configuration.height /2)
                     outwardForce.normalize()
                     outwardForce *= 0.4
 
@@ -141,7 +141,7 @@ fun main() = application {
 
         val particles = Rectangle(0.0, 0.0, 200.0, 200.0).shape.outline
                 .equidistantPositions(PARTICLES)
-                .map { Particle(vector2(Configuration.Width /2 - 100 + it.x, Configuration.Height /2 - 100 + it.y)) }
+                .map { Particle(vector2(Configuration.width /2 - 100 + it.x, Configuration.height /2 - 100 + it.y)) }
 
         //val particles = List(PARTICLES) { idx ->
         //    val angle = 2 * PI * (idx / PARTICLES.toDouble())
@@ -167,7 +167,7 @@ fun main() = application {
                     particles.forEach { it.reset() }
                 }
             }
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(GaussianBloom())
             //    post(FrameBlur())
             }
@@ -178,7 +178,7 @@ fun main() = application {
         //}
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount > TOTAL_FRAMES) {
                     videoWriter.stop()
                     application.exit()

@@ -12,7 +12,6 @@ import org.openrndr.shape.LineSegment
 import org.ygl.openrndr.demos.util.RingBuffer
 import org.ygl.openrndr.utils.color
 import org.ygl.openrndr.utils.rangeMap
-import sun.security.krb5.Config
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -20,19 +19,19 @@ private const val SEGMENTS = 32
 private const val GAP = 0.05
 private const val SPEED = 1.9
 
-private fun x1(dt: Double) = Configuration.Width/2.3 * cos(dt) + 47 * sin(dt * 2.3)
+private fun x1(dt: Double) = Configuration.width/2.3 * cos(dt) + 47 * sin(dt * 2.3)
 
-private fun y1(dt: Double) = Configuration.Height/2.7 * sin(dt) - 53 * cos(dt * 1.7)
+private fun y1(dt: Double) = Configuration.height/2.7 * sin(dt) - 53 * cos(dt * 1.7)
 
-private fun x2(dt: Double) = Configuration.Width/2.5 * sin(dt / 1.3) + 59 * cos(dt * 0.5)
+private fun x2(dt: Double) = Configuration.width/2.5 * sin(dt / 1.3) + 59 * cos(dt * 0.5)
 
-private fun y2(dt: Double) = Configuration.Height/2.4 * cos(dt * 1.7) - 41 * sin(dt * 2.1)
+private fun y2(dt: Double) = Configuration.height/2.4 * cos(dt * 1.7) - 41 * sin(dt * 2.1)
 
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -69,7 +68,7 @@ fun main() = application {
                 aberrationFactor = 0.0 + 50.0 * sin(seconds * 0.2)
             }
         }
-        if (Configuration.Recording) {
+        if (Configuration.recording) {
             extend(ScreenRecorder())
         }
         extend {

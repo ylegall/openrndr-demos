@@ -20,10 +20,10 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.random.Random
 
-private val TOTAL_FRAMES = if (Configuration.Recording) 36 else 18
-private val NUM_PATHS = if (Configuration.Recording) 3000 else 2000
-private val PATH_PARTICLES = if (Configuration.Recording) 32 else 10
-private val PATH_SNAPSHOTS = if (Configuration.Recording) 200 else 100
+private val TOTAL_FRAMES = if (Configuration.recording) 36 else 18
+private val NUM_PATHS = if (Configuration.recording) 3000 else 2000
+private val PATH_PARTICLES = if (Configuration.recording) 32 else 10
+private val PATH_SNAPSHOTS = if (Configuration.recording) 200 else 100
 private const val PATH_DELTA = 0.6
 private const val MAX_MAGNITUDE = 54
 
@@ -64,8 +64,8 @@ private fun getFieldVector(x: Double, y: Double): Vector2 {
             getSimplexNoise(x, y)
     ).let {
         Vector2(
-                5 + it.x * (x / Configuration.Width.toDouble()),
-                5 + it.y * (y / Configuration.Height.toDouble())
+                5 + it.x * (x / Configuration.width.toDouble()),
+                5 + it.y * (y / Configuration.height.toDouble())
         )
     }
 }
@@ -73,8 +73,8 @@ private fun getFieldVector(x: Double, y: Double): Vector2 {
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     class Path {
@@ -83,8 +83,8 @@ fun main() = application {
 
         private fun computePathSnapshots(): List<Vector2> {
             val snapshots = ArrayList<Vector2>(PATH_SNAPSHOTS)
-            var x = Random.nextDouble(Configuration.Width.toDouble())
-            var y = Random.nextDouble(Configuration.Width.toDouble())
+            var x = Random.nextDouble(Configuration.width.toDouble())
+            var y = Random.nextDouble(Configuration.width.toDouble())
             repeat(PATH_SNAPSHOTS) {
                 snapshots.add(vector2(x, y))
                 val fieldVector = getFieldVector(x, y)
@@ -141,7 +141,7 @@ fun main() = application {
             loadParameters(File("data/flow-params.json"))
         }
 
-        if (Configuration.Recording) {
+        if (Configuration.recording) {
             extend(ScreenRecorder()) {
                 frameRate = 30
                 frameClock = true
@@ -150,7 +150,7 @@ fun main() = application {
 
         extend {
             composite.draw(drawer)
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES) {
                     application.exit()
                 }

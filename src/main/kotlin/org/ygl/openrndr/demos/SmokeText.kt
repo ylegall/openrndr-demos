@@ -9,7 +9,6 @@ import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.FrameBlur
 import org.openrndr.extra.fx.blur.GaussianBloom
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.smoothstep
@@ -25,8 +24,8 @@ private const val SEED = 415
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {

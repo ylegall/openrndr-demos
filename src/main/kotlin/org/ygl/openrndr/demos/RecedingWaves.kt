@@ -19,7 +19,6 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
-import kotlin.math.sqrt
 
 
 private const val LAYERS = 180
@@ -36,14 +35,14 @@ private const val FRAME_DELAY = 120
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
-    val MIN_LAYER_WIDTH = Configuration.Width / 2 - 2 * LAYER_BORDER
-    val MAX_LAYER_WIDTH = Configuration.Width - 2 * LAYER_BORDER
+    val MIN_LAYER_WIDTH = Configuration.width / 2 - 2 * LAYER_BORDER
+    val MAX_LAYER_WIDTH = Configuration.width - 2 * LAYER_BORDER
     val MIN_LAYER_HEIGHT = LAYER_BORDER
-    val MAX_LAYER_HEIGHT = Configuration.Height
+    val MAX_LAYER_HEIGHT = Configuration.height
     
     program {
 
@@ -78,7 +77,7 @@ fun main() = application {
                     val perspectiveProgress = layerProgress.pow(2)
                     val widthProgress = perspectiveProgress * (MAX_LAYER_WIDTH - MIN_LAYER_WIDTH)
                     val layerWidth = MIN_LAYER_WIDTH + widthProgress
-                    val xOffset = (Configuration.Width - MIN_LAYER_WIDTH) / 2.0
+                    val xOffset = (Configuration.width - MIN_LAYER_WIDTH) / 2.0
                     val startX = xOffset - widthProgress / 2.0
 
                     val y = MIN_LAYER_HEIGHT + (MAX_LAYER_HEIGHT - MIN_LAYER_HEIGHT) * perspectiveProgress
@@ -119,7 +118,7 @@ fun main() = application {
                     drawer.contour(curve)
                 }
             }
-            if (Configuration.Recording) { post(FrameBlur()) }
+            if (Configuration.recording) { post(FrameBlur()) }
         }
 
 //        extend(ScreenRecorder()) {
@@ -128,7 +127,7 @@ fun main() = application {
 //        }
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     composite.draw(drawer)
                 }

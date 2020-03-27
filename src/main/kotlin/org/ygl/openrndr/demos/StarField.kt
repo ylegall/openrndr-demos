@@ -17,11 +17,11 @@ private const val SPEED = 200
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
-    val MAX_DEPTH = Configuration.Width / 2.0
+    val MAX_DEPTH = Configuration.width / 2.0
 
     class Star(
             var x: Double,

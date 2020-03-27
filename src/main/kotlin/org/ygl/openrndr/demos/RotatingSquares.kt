@@ -12,8 +12,8 @@ private const val SPIN_RATE = 0.2
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     class Square(
@@ -23,8 +23,8 @@ fun main() = application {
 
     val squares = (1 .. SQUARES).map {
         val percent = it / SQUARES.toDouble()
-        val squareWidth = Configuration.Width * percent
-        Square(squareWidth, (Configuration.Width / 2.0 - squareWidth / 2.0))
+        val squareWidth = Configuration.width * percent
+        Square(squareWidth, (Configuration.width / 2.0 - squareWidth / 2.0))
 
     }.reversed()
 

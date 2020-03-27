@@ -32,8 +32,8 @@ private const val SEED2 = 12987
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     val noise = FastNoise()
@@ -51,9 +51,9 @@ fun main() = application {
     )
 
     val points = List(ROWS) { row ->
-        val y = BORDER + row * ((Configuration.Height - BORDER) / ROWS)
+        val y = BORDER + row * ((Configuration.height - BORDER) / ROWS)
         List(COLS) { col ->
-            val x = BORDER + col * ((Configuration.Width - BORDER) / COLS)
+            val x = BORDER + col * ((Configuration.width - BORDER) / COLS)
             Leaf(
                     pos = vector2(
                             x + Random.nextDouble(-MAX_OFFSET/2, MAX_OFFSET/2),
@@ -117,12 +117,12 @@ fun main() = application {
                 }
 
             }
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
         }
 
-        if (Configuration.Recording) {
+        if (Configuration.recording) {
             extend(ScreenRecorder()) {
                 outputFile = "video1/ocean-grass.mp4"
                 frameRate = 60
@@ -138,7 +138,7 @@ fun main() = application {
         extend {
             composite.draw(drawer)
 
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES) {
                     application.exit()
                 }

@@ -33,7 +33,7 @@ private fun getSpiralPoint(
         flip: Boolean
 ): Vector2 {
     val angle = PI/2.0 * (1 - progress) * curvature
-    val radius = Configuration.Width / 2.0 * sqrt(progress)
+    val radius = Configuration.width / 2.0 * sqrt(progress)
     return if (flip) {
         Vector2(radius * cos(angle), -radius * sin(angle))
     } else {
@@ -45,8 +45,8 @@ private fun getSpiralPoint(
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -77,7 +77,7 @@ fun main() = application {
                 1.0
             } else {
                 val eased = Ease.EXP_INOUT((frameProgress - 0.5) * 2)
-                Configuration.Width * Ease.CUBE_INOUT(eased) + 1
+                Configuration.width * Ease.CUBE_INOUT(eased) + 1
             }
         }
 
@@ -113,11 +113,11 @@ fun main() = application {
                 }
                 drawer.contour(shapeContour)
             }
-            if (Configuration.Recording) { post(FrameBlur()) }
+            if (Configuration.recording) { post(FrameBlur()) }
         }
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     drawer.translate(width / 2.0, height / 2.0)
                     composite.draw(drawer)

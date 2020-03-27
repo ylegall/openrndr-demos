@@ -41,8 +41,8 @@ private val colorMap = ColorMap(listOf(
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     data class MutableCircle(
@@ -58,7 +58,7 @@ fun main() = application {
     {
         val allCircles = mutableSetOf<MutableCircle>()
         val openTiles = mutableSetOf<Pair<Int, Int>>()
-        val closedTiles = Array(Configuration.Height) { BitSet(Configuration.Width) }
+        val closedTiles = Array(Configuration.height) { BitSet(Configuration.width) }
 
         var growingCircles = 0; private set
         var circleLimitReached = false; private set
@@ -70,8 +70,8 @@ fun main() = application {
         }
 
         init {
-            for (y in 0 until Configuration.Height) {
-                for (x in 0 until Configuration.Width) {
+            for (y in 0 until Configuration.height) {
+                for (x in 0 until Configuration.width) {
                     openTiles.add(x to y)
                 }
             }
@@ -147,8 +147,8 @@ fun main() = application {
             }
 
             return points.map { Pair(
-                    (it.first + circle.pos.x.toInt()).coerceIn(0 until Configuration.Width),
-                    (it.second + circle.pos.y.toInt()).coerceIn(0 until Configuration.Height)
+                    (it.first + circle.pos.x.toInt()).coerceIn(0 until Configuration.width),
+                    (it.second + circle.pos.y.toInt()).coerceIn(0 until Configuration.height)
                 )
             }
         }
@@ -161,8 +161,8 @@ fun main() = application {
         // load logo mask:
         val image = loadImage("data/Indeed-logo-full.png")
         image.shadow.download()
-        for (y in 0 until Configuration.Height) {
-            for (x in 0 until Configuration.Width) {
+        for (y in 0 until Configuration.height) {
+            for (x in 0 until Configuration.width) {
                 val color = image.shadow[x, y]
                 if (color.r + color.g + color.b < 1.0) {
                     circleGrid.removePoint(x to y)
@@ -181,7 +181,7 @@ fun main() = application {
             }
         }
 
-        if(Configuration.Recording) {
+        if(Configuration.recording) {
             extend(ScreenRecorder())
         }
         extend {

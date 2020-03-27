@@ -8,8 +8,6 @@ import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.FrameBlur
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.noise.lerp
-import org.openrndr.extra.noise.simplex
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.ffmpeg.VideoWriter
@@ -38,11 +36,11 @@ private const val FRAME_DELAY = 120
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
-    val FRONT_X = -Configuration.Width/2 + BORDER
-    val FRONT_Y = Configuration.Height/2 - BORDER
+    val FRONT_X = -Configuration.width/2 + BORDER
+    val FRONT_Y = Configuration.height/2 - BORDER
 
     program {
 
@@ -128,7 +126,7 @@ fun main() = application {
                     drawer.contour(curve)
                 }
             }
-            if (Configuration.Recording) { post(FrameBlur()) }
+            if (Configuration.recording) { post(FrameBlur()) }
         }
 
 //        extend(GUI()) {
@@ -138,7 +136,7 @@ fun main() = application {
 
         extend {
             drawer.translate(width/2.0, height/2.0)
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     composite.draw(drawer)
                 }

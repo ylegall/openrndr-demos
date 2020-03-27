@@ -32,8 +32,8 @@ private const val DELAY_FRAMES = TOTAL_FRAMES / 4
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -78,7 +78,7 @@ fun main() = application {
                 val angle = 4 * PI * (pathProgress - time + angleOffset)
                 val x0 = radius * cos(sign * angle)
                 val z0 = radius * sin(sign * angle)
-                val y0 = sign * (easedProgress * Configuration.Height * 0.7)
+                val y0 = sign * (easedProgress * Configuration.height * 0.7)
 
                 val noiseScale = pathProgress * params.noiseScale
 
@@ -134,7 +134,7 @@ fun main() = application {
                 }
 
             }
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(GaussianBloom())
                 post(FrameBlur())
             }
@@ -145,7 +145,7 @@ fun main() = application {
         //extend(GUI()) { add(params) }
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

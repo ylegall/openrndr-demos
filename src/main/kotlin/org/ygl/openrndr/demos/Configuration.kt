@@ -8,15 +8,15 @@ object Configuration {
     /**
      * Viewport Width
      */
-    var Width = 1024
+    var width = 800
 
     /**
      * Viewport Height
      */
-    var Height = 1024
+    var height = 800
 
     /**
      * Enable recording
      */
-    var Recording = false
+    var recording = false
 }

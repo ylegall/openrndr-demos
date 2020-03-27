@@ -17,10 +17,10 @@ fun main() = application {
 
     configure {
         title = "Spring Particles"
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
-    val WIDTH_IN_PARTICLES = Configuration.Width / PARTICLE_SIZE
+    val WIDTH_IN_PARTICLES = Configuration.width / PARTICLE_SIZE
 
     val mouseForce = mvector(0, 0)
     val anchorForce = mvector(0, 0)
@@ -50,8 +50,8 @@ fun main() = application {
             velocity += anchorForce
             velocity *= DAMPING
             position += velocity
-            position.x = position.x.coerceIn(0.0, Configuration.Width.toDouble())
-            position.y = position.y.coerceIn(0.0, Configuration.Height.toDouble())
+            position.x = position.x.coerceIn(0.0, Configuration.width.toDouble())
+            position.y = position.y.coerceIn(0.0, Configuration.height.toDouble())
         }
     }
 
@@ -59,7 +59,7 @@ fun main() = application {
         val bgColor = color(32, 64, 127)
         val particleColor = color(32, 213, 127)
         var mousePosition: Vector2? = null
-        val particles = Array(WIDTH_IN_PARTICLES * Configuration.Height / PARTICLE_SIZE) {
+        val particles = Array(WIDTH_IN_PARTICLES * Configuration.height / PARTICLE_SIZE) {
             Particle(
                     (it % WIDTH_IN_PARTICLES) * PARTICLE_SIZE + PARTICLE_SIZE/2,
                     (it / WIDTH_IN_PARTICLES) * PARTICLE_SIZE + PARTICLE_SIZE/2

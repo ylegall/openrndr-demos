@@ -21,9 +21,7 @@ import org.openrndr.math.transforms.transform
 import org.openrndr.shape.ShapeContour
 import org.openrndr.shape.contour
 import org.ygl.fastnoise.FastNoise
-import org.ygl.openrndr.utils.Radians
 import org.ygl.openrndr.utils.rangeMap
-import org.ygl.openrndr.utils.rotate
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.pow
@@ -39,8 +37,8 @@ private const val SHAPE_POINTS = 192
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -155,7 +153,7 @@ fun main() = application {
                 }
             }
 
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
         }
@@ -167,7 +165,7 @@ fun main() = application {
         //}
 
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

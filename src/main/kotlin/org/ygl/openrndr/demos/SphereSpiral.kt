@@ -27,8 +27,8 @@ private const val DELAY_FRAMES = TOTAL_FRAMES / 2
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -105,7 +105,7 @@ fun main() = application {
                 drawCurve(time, flip = false)
                 drawCurve(time, flip = true)
             }
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(GaussianBloom())
                 post(FrameBlur())
             }
@@ -113,7 +113,7 @@ fun main() = application {
 
         extend(camera)
         extend {
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

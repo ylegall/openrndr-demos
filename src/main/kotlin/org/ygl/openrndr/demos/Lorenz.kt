@@ -37,8 +37,8 @@ private data class MutablePoint3D(
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     var streakLength = 2
@@ -98,7 +98,7 @@ fun main() = application {
                     randomColorRGBa(a = 1.0)
             )
         }
-        if(Configuration.Recording) {
+        if(Configuration.recording) {
             extend(ScreenRecorder())
         }
         extend {

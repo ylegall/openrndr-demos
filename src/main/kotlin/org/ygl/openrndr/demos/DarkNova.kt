@@ -34,15 +34,15 @@ private const val DELAY_FACTOR = 3
 fun main() = application {
 
     configure {
-        width = Configuration.Width
-        height = Configuration.Height
+        width = Configuration.width
+        height = Configuration.height
     }
 
     val innerPoints = ArrayList<Vector2>(RING_POINTS)
     val outerPoints = ArrayList<Vector2>(RING_POINTS)
     for (i in 0 until RING_POINTS) {
         val angle = 2 * PI * (i / RING_POINTS.toDouble())
-        outerPoints.add(Vector2((Configuration.Width/2 - 20) * cos(angle), (Configuration.Height/2 - 20) * sin(angle)))
+        outerPoints.add(Vector2((Configuration.width/2 - 20) * cos(angle), (Configuration.height/2 - 20) * sin(angle)))
         innerPoints.add(Vector2(20 * cos(angle), 20 * sin(angle)))
     }
 
@@ -75,9 +75,9 @@ fun main() = application {
 
     program {
 
-        val videoTarget = renderTarget(Configuration.Width, Configuration.Height) { colorBuffer() }
+        val videoTarget = renderTarget(Configuration.width, Configuration.height) { colorBuffer() }
         val videoWriter = VideoWriter.create()
-                .size(Configuration.Width, Configuration.Height)
+                .size(Configuration.width, Configuration.height)
                 .output("video/dark-nova.mp4")
                 .frameRate(60)
                 .start()
@@ -107,7 +107,7 @@ fun main() = application {
 
             post(GaussianBloom())
 
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
         }
@@ -121,7 +121,7 @@ fun main() = application {
                     length = 0.5
             )
 
-            if (Configuration.Recording) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()
