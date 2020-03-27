@@ -25,8 +25,6 @@ CCAF92
 EA8760
 */
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val CIRCLES_PER_FRAME = 5
 private const val INITIAL_RADIUS = 0.0
 private const val MAX_RADIUS = 72.0
@@ -43,8 +41,8 @@ private val colorMap = ColorMap(listOf(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     data class MutableCircle(
@@ -60,7 +58,7 @@ fun main() = application {
     {
         val allCircles = mutableSetOf<MutableCircle>()
         val openTiles = mutableSetOf<Pair<Int, Int>>()
-        val closedTiles = Array(HEIGHT) { BitSet(WIDTH) }
+        val closedTiles = Array(Configuration.height) { BitSet(Configuration.width) }
 
         var growingCircles = 0; private set
         var circleLimitReached = false; private set
@@ -72,8 +70,8 @@ fun main() = application {
         }
 
         init {
-            for (y in 0 until HEIGHT) {
-                for (x in 0 until WIDTH) {
+            for (y in 0 until Configuration.height) {
+                for (x in 0 until Configuration.width) {
                     openTiles.add(x to y)
                 }
             }
@@ -149,8 +147,8 @@ fun main() = application {
             }
 
             return points.map { Pair(
-                    (it.first + circle.pos.x.toInt()).coerceIn(0 until WIDTH),
-                    (it.second + circle.pos.y.toInt()).coerceIn(0 until HEIGHT)
+                    (it.first + circle.pos.x.toInt()).coerceIn(0 until Configuration.width),
+                    (it.second + circle.pos.y.toInt()).coerceIn(0 until Configuration.height)
                 )
             }
         }
@@ -163,8 +161,8 @@ fun main() = application {
         // load logo mask:
         val image = loadImage("data/Indeed-logo-full.png")
         image.shadow.download()
-        for (y in 0 until HEIGHT) {
-            for (x in 0 until WIDTH) {
+        for (y in 0 until Configuration.height) {
+            for (x in 0 until Configuration.width) {
                 val color = image.shadow[x, y]
                 if (color.r + color.g + color.b < 1.0) {
                     circleGrid.removePoint(x to y)
@@ -183,7 +181,9 @@ fun main() = application {
             }
         }
 
-        extend(ScreenRecorder())
+        if(Configuration.recording) {
+            extend(ScreenRecorder())
+        }
         extend {
             composite.draw(drawer)
             if (frameCount % 100 == 0) {

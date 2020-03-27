@@ -8,17 +8,10 @@ import org.openrndr.draw.renderTarget
 import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
-import org.openrndr.extra.compositor.post
-import org.openrndr.extra.fx.blur.GaussianBloom
-import org.openrndr.ffmpeg.ScreenRecorder
-import org.openrndr.shape.Rectangle
-import org.openrndr.shape.contour
 import org.ygl.openrndr.utils.isolatedWithTarget
 import org.ygl.openrndr.utils.rect
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val START_POINTS = 7
 private const val START_SIZE = 27
 
@@ -30,8 +23,8 @@ private const val INITIAL_DB = 0.156 //
 
 fun main() = application {
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {

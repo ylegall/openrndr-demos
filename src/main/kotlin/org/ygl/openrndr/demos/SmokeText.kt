@@ -9,7 +9,6 @@ import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.FrameBlur
 import org.openrndr.extra.fx.blur.GaussianBloom
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.math.Vector2
 import org.openrndr.math.smoothstep
@@ -18,8 +17,6 @@ import org.ygl.openrndr.utils.isolatedWithTarget
 import org.ygl.openrndr.utils.vector2
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val PAUSE_FRAMES = 180
 private const val TOTAL_FRAMES = 480
 private const val SEED = 415
@@ -27,8 +24,8 @@ private const val SEED = 415
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {

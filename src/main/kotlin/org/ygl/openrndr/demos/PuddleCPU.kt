@@ -8,14 +8,8 @@ import org.openrndr.draw.shadeStyle
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.layer
-import org.openrndr.extras.camera.AxisHelper
-import org.openrndr.extras.camera.GridHelper
-import org.openrndr.extras.camera.OrbitalCamera
-import org.openrndr.extras.camera.OrbitalControls
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.math.Vector2
-import org.openrndr.math.Vector3
 import org.openrndr.math.smoothstep
 import org.ygl.openrndr.utils.distanceFrom
 import org.ygl.openrndr.utils.isolatedWithTarget
@@ -23,21 +17,18 @@ import org.ygl.openrndr.utils.vector2
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = WIDTH
 private const val INSET = 640
 private const val TOTAL_FRAMES = 180
 private const val DELAY_FRAMES = TOTAL_FRAMES
 private const val RIPPLE_WIDTH = 40
 private const val MAX_REFRACT = 30.0
 private const val MAX_RADIUS = 250
-private const val RECORDING = true
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -60,7 +51,7 @@ fun main() = application {
 
         val ripples = List(11) {
             Ripple(
-                    vector2(Random.nextInt(WIDTH), Random.nextInt(HEIGHT)),
+                    vector2(Random.nextInt(Configuration.width), Random.nextInt(Configuration.height)),
                     Random.nextDouble()
             )
         }
@@ -140,7 +131,7 @@ fun main() = application {
 
                     drawer.fill = ColorRGBa.WHITE
                     drawer.stroke = null
-                    drawer.rectangle((WIDTH - INSET)/2.0, (HEIGHT - INSET)/2.0, INSET.toDouble(), INSET.toDouble())
+                    drawer.rectangle((Configuration.width - INSET)/2.0, (Configuration.height - INSET)/2.0, INSET.toDouble(), INSET.toDouble())
                 }
             }
         }
@@ -152,7 +143,7 @@ fun main() = application {
 
         extend {
             colorPixels()
-            if (RECORDING) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

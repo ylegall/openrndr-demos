@@ -4,18 +4,11 @@ import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
-import org.openrndr.extra.compositor.post
-import org.openrndr.extra.fx.blur.FrameBlur
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.math.Vector2
 import org.ygl.openrndr.demos.util.FastSimplexNoise4D
 import org.ygl.openrndr.utils.ColorMap
-import org.ygl.openrndr.utils.MutableVector2
-import org.ygl.openrndr.utils.vector2
 import kotlin.math.round
 
-private const val WIDTH = 600
-private const val HEIGHT = 600
 private const val GRID_SIZE = 300
 private const val TOTAL_FRAMES = 300
 
@@ -51,8 +44,8 @@ private fun getFieldVector(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {

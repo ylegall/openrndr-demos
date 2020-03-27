@@ -24,19 +24,16 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.random.Random
 
-private const val WIDTH = 920
-private const val HEIGHT = 920
 private const val SPIRAL_ARMS = 16
 private const val PATH_POINTS = 1024
 private const val TOTAL_FRAMES = 360
 private const val DELAY_FRAMES = TOTAL_FRAMES / 4
-private const val RECORDING = false
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -81,7 +78,7 @@ fun main() = application {
                 val angle = 4 * PI * (pathProgress - time + angleOffset)
                 val x0 = radius * cos(sign * angle)
                 val z0 = radius * sin(sign * angle)
-                val y0 = sign * (easedProgress * HEIGHT * 0.7)
+                val y0 = sign * (easedProgress * Configuration.height * 0.7)
 
                 val noiseScale = pathProgress * params.noiseScale
 
@@ -137,7 +134,7 @@ fun main() = application {
                 }
 
             }
-            if (RECORDING) {
+            if (Configuration.recording) {
                 post(GaussianBloom())
                 post(FrameBlur())
             }
@@ -148,7 +145,7 @@ fun main() = application {
         //extend(GUI()) { add(params) }
 
         extend {
-            if (RECORDING) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

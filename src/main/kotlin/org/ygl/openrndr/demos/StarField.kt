@@ -12,18 +12,16 @@ import org.ygl.openrndr.utils.color
 import org.ygl.openrndr.utils.rangeMap
 import kotlin.random.Random
 
-
-private const val WIDTH = 800
-private const val HEIGHT = 800
-private const val MAX_DEPTH = WIDTH / 2.0
 private const val SPEED = 200
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
+
+    val MAX_DEPTH = Configuration.width / 2.0
 
     class Star(
             var x: Double,
@@ -82,7 +80,7 @@ fun main() = application {
         extend(ScreenRecorder())
         extend {
 //            drawer.fill = color(0, 1, 2, 128)
-//            drawer.rect(0.0, 0.0, WIDTH, HEIGHT)
+//            drawer.rect(0.0, 0.0, Configuration.Width, Configuration.Height)
             drawer.translate(width/2.0, height/2.0)
             drawer.rotate(seconds * 21)
             drawer.scale(0.7)

@@ -13,11 +13,8 @@ import org.openrndr.ffmpeg.ScreenRecorder
 import org.ygl.openrndr.utils.rect
 import java.io.File
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
-private const val TOTAL_FRAMES = 360 * 1
 
-private const val RECORDING = false
+private const val TOTAL_FRAMES = 360 * 1
 
 private val params = @Description("params") object {
     @DoubleParameter("noise scale", 0.0, 4.0)
@@ -33,8 +30,8 @@ private val noiseFragShader = File("data/shaders/simplexNoise4D.glsl").readText(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -99,14 +96,14 @@ fun main() = application {
                     parameter("time", timeProgress)
                 }
 
-                drawer.rect(0, 0, WIDTH, HEIGHT)
+                drawer.rect(0, 0, Configuration.width, Configuration.height)
             }
-            if (RECORDING) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
         }
 
-        if (RECORDING) {
+        if (Configuration.recording) {
             extend(ScreenRecorder()) {
                 frameRate = 60
                 frameClock = true
@@ -116,7 +113,7 @@ fun main() = application {
         extend {
             composite.draw(drawer)
 
-            if (RECORDING) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES) {
                     application.exit()
                 }

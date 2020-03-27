@@ -6,25 +6,14 @@ import org.openrndr.extra.compositor.compose
 import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.FrameBlur
-import org.openrndr.ffmpeg.ScreenRecorder
 import org.openrndr.math.Vector2
-import org.ygl.kxa.ease.Ease
-import org.ygl.kxa.ease.EaseFunctions
 import org.ygl.openrndr.demos.util.simplexNoise2D
-import org.ygl.openrndr.utils.distanceFrom
-import org.ygl.openrndr.utils.rangeMap
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
-import kotlin.math.log
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val PI_2 = PI / 2
 private const val TOTAL_FRAMES = 360
 private const val FRAME_SPEED = 0.5
@@ -36,7 +25,7 @@ private fun getSpiralPoint(
         curvature: Double
 ): Vector2 {
     val angle = PI_2 * progress.pow(0.7) * curvature
-    val radius = WIDTH/2.0 * progress * sqrt(progress)
+    val radius = Configuration.width/2.0 * progress * sqrt(progress)
     return Vector2(radius * cos(angle), radius * sin(angle))
 }
 
@@ -44,8 +33,8 @@ private fun getSpiralPoint(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -65,7 +54,7 @@ fun main() = application {
                 val curveProgress = (i / POINTS.toDouble())
                 val p1 = getSpiralPoint(curveProgress, curvature)
                 val p2 = p1 * -1.0
-                val dist = p1.length / (WIDTH / 1.5)
+                val dist = p1.length / (Configuration.width / 1.5)
                 val distortion = 18 * curveProgress * dist
                 val maxDelta = dist * 29
                 val dx1 = maxDelta * simplexNoise2D(seed * 1, curveProgress, timeOffset = timeProgress, radius = distortion)

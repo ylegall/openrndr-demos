@@ -17,14 +17,12 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
+
 private const val TWO_PI = 2 * PI
 
 private const val TOTAL_FRAMES = 720
 private const val FRAME_DELAY = TOTAL_FRAMES
 private const val FRAME_SPEED = 1
-private const val RECORDING = false
 
 private const val CURVE_POINTS = 2000
 private const val MAX_CURVATURE = 16
@@ -35,7 +33,7 @@ private fun getSpiralPoint(
         flip: Boolean
 ): Vector2 {
     val angle = PI/2.0 * (1 - progress) * curvature
-    val radius = WIDTH / 2.0 * sqrt(progress)
+    val radius = Configuration.width / 2.0 * sqrt(progress)
     return if (flip) {
         Vector2(radius * cos(angle), -radius * sin(angle))
     } else {
@@ -47,8 +45,8 @@ private fun getSpiralPoint(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -79,7 +77,7 @@ fun main() = application {
                 1.0
             } else {
                 val eased = Ease.EXP_INOUT((frameProgress - 0.5) * 2)
-                WIDTH * Ease.CUBE_INOUT(eased) + 1
+                Configuration.width * Ease.CUBE_INOUT(eased) + 1
             }
         }
 
@@ -115,11 +113,11 @@ fun main() = application {
                 }
                 drawer.contour(shapeContour)
             }
-            if (RECORDING) { post(FrameBlur()) }
+            if (Configuration.recording) { post(FrameBlur()) }
         }
 
         extend {
-            if (RECORDING) {
+            if (Configuration.recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     drawer.translate(width / 2.0, height / 2.0)
                     composite.draw(drawer)

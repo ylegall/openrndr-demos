@@ -20,21 +20,19 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-private const val WIDTH = 640
-private const val HEIGHT = WIDTH
+
 private const val TOTAL_FRAMES = 360
 
 private const val RINGS = 64
 private const val RING_GAP = 10
 private const val DISK_POINTS = 720
 
-private const val RECORDING = false
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -56,10 +54,10 @@ fun main() = application {
                 for (i in 0 until DISK_POINTS) {
                     val ringProgress = i / DISK_POINTS.toDouble()
                     val radians = 2.0 * PI * ringProgress
-                    val x = (WIDTH/2 + radius * cos(radians)).toInt()
-                    val y = (HEIGHT/2 + radius * sin(radians)).toInt()
-                    if (x !in 0 until WIDTH) continue
-                    if (y !in 0 until HEIGHT) continue
+                    val x = (Configuration.width/2 + radius * cos(radians)).toInt()
+                    val y = (Configuration.height/2 + radius * sin(radians)).toInt()
+                    if (x !in 0 until Configuration.width) continue
+                    if (y !in 0 until Configuration.height) continue
                     val color = shadow[x, y]
                     if (color.r + color.g + color.b > 2.5) {
                         if (a1 == null) {
@@ -114,7 +112,7 @@ fun main() = application {
             draw {
                 drawer.background(ColorRGBa.BLACK)
             }
-            if (RECORDING) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
             layer {
@@ -139,7 +137,7 @@ fun main() = application {
             drawer.translate(width/2.0, height/2.0)
             composite.draw(drawer)
 
-            if (RECORDING) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES) {
                     application.exit()
                 }

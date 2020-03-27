@@ -8,8 +8,6 @@ import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blur.FrameBlur
 import org.openrndr.extra.gui.GUI
-import org.openrndr.extra.noise.lerp
-import org.openrndr.extra.noise.simplex
 import org.openrndr.extra.parameters.Description
 import org.openrndr.extra.parameters.DoubleParameter
 import org.openrndr.ffmpeg.VideoWriter
@@ -25,27 +23,24 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
-
 private const val LAYERS = 180
 private const val POINTS_PER_LAYER = 200
 
 private const val BORDER = 40
-private const val FRONT_X = -WIDTH/2 + BORDER
-private const val FRONT_Y = HEIGHT/2 - BORDER
+
 private const val MAX_DIST = 20
 
 private const val TOTAL_FRAMES = 360
-private const val RECORDING = false
 private const val FRAME_DELAY = 120
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
+    val FRONT_X = -Configuration.width/2 + BORDER
+    val FRONT_Y = Configuration.height/2 - BORDER
 
     program {
 
@@ -131,7 +126,7 @@ fun main() = application {
                     drawer.contour(curve)
                 }
             }
-            if (RECORDING) { post(FrameBlur()) }
+            if (Configuration.recording) { post(FrameBlur()) }
         }
 
 //        extend(GUI()) {
@@ -141,7 +136,7 @@ fun main() = application {
 
         extend {
             drawer.translate(width/2.0, height/2.0)
-            if (RECORDING) {
+            if (Configuration.recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     composite.draw(drawer)
                 }

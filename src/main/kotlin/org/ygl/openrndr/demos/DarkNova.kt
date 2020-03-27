@@ -22,8 +22,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
+
 private const val TOTAL_FRAMES = 360
 private const val DELAY_FRAMES = TOTAL_FRAMES / 2
 
@@ -31,20 +30,19 @@ private const val RING_POINTS = 20
 private const val PATH_POINTS = 512
 private const val DELAY_FACTOR = 3
 
-private const val RECORDING = true
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     val innerPoints = ArrayList<Vector2>(RING_POINTS)
     val outerPoints = ArrayList<Vector2>(RING_POINTS)
     for (i in 0 until RING_POINTS) {
         val angle = 2 * PI * (i / RING_POINTS.toDouble())
-        outerPoints.add(Vector2((WIDTH/2 - 20) * cos(angle), (HEIGHT/2 - 20) * sin(angle)))
+        outerPoints.add(Vector2((Configuration.width/2 - 20) * cos(angle), (Configuration.height/2 - 20) * sin(angle)))
         innerPoints.add(Vector2(20 * cos(angle), 20 * sin(angle)))
     }
 
@@ -77,9 +75,9 @@ fun main() = application {
 
     program {
 
-        val videoTarget = renderTarget(WIDTH, HEIGHT) { colorBuffer() }
+        val videoTarget = renderTarget(Configuration.width, Configuration.height) { colorBuffer() }
         val videoWriter = VideoWriter.create()
-                .size(WIDTH, HEIGHT)
+                .size(Configuration.width, Configuration.height)
                 .output("video/dark-nova.mp4")
                 .frameRate(60)
                 .start()
@@ -109,7 +107,7 @@ fun main() = application {
 
             post(GaussianBloom())
 
-            if (RECORDING) {
+            if (Configuration.recording) {
                 post(FrameBlur())
             }
         }
@@ -123,7 +121,7 @@ fun main() = application {
                     length = 0.5
             )
 
-            if (RECORDING) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

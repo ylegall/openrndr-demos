@@ -9,14 +9,10 @@ import org.openrndr.extra.compositor.draw
 import org.openrndr.extra.compositor.layer
 import org.openrndr.extra.compositor.post
 import org.openrndr.extra.fx.blend.Normal
-import org.openrndr.extra.fx.blur.BoxBlur
-import org.openrndr.extra.fx.blur.FrameBlur
-import org.openrndr.extra.fx.blur.HashBlur
 import org.openrndr.extra.fx.shadow.DropShadow
 import org.openrndr.extra.shadestyles.linearGradient
 import org.openrndr.ffmpeg.MP4Profile
 import org.openrndr.ffmpeg.ScreenRecorder
-import org.openrndr.ffmpeg.VideoWriterProfile
 import org.openrndr.math.Vector2
 import org.ygl.openrndr.utils.Degrees
 import org.ygl.openrndr.utils.color
@@ -26,9 +22,6 @@ import org.ygl.openrndr.utils.rotate
 import org.ygl.openrndr.utils.vector2
 import kotlin.math.abs
 
-
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val SPEED = 1.0
 private const val ROWS = 16
 private const val ROWS_2 = ROWS / 2
@@ -37,8 +30,8 @@ private const val GAP = 42
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     val bgColor1 = ColorRGBa.fromHex(0x292e53)

@@ -7,15 +7,13 @@ import kotlin.math.PI
 import kotlin.math.cos
 
 private const val SQUARES = 64
-private const val SCREEN_WIDTH = 800
-private const val SCREEN_HEIGHT = 800
 private const val SPIN_RATE = 0.2
 
 fun main() = application {
 
     configure {
-        width = SCREEN_WIDTH
-        height = SCREEN_HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     class Square(
@@ -25,8 +23,8 @@ fun main() = application {
 
     val squares = (1 .. SQUARES).map {
         val percent = it / SQUARES.toDouble()
-        val squareWidth = SCREEN_WIDTH * percent
-        Square(squareWidth, (SCREEN_WIDTH / 2.0 - squareWidth / 2.0))
+        val squareWidth = Configuration.width * percent
+        Square(squareWidth, (Configuration.width / 2.0 - squareWidth / 2.0))
 
     }.reversed()
 

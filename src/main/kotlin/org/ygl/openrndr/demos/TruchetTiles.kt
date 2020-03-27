@@ -16,8 +16,6 @@ import org.ygl.kxa.ease.Ease
 import org.ygl.openrndr.utils.isolated
 import kotlin.random.Random
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
 private const val TILE_SIZE = 64
 private const val TILE_STROKE = 16
 
@@ -25,13 +23,11 @@ private const val TOTAL_FRAMES = 360
 private const val PAUSE_FRAMES = TOTAL_FRAMES / 4
 private const val DELAY_FRAMES = TOTAL_FRAMES + PAUSE_FRAMES
 
-private const val RECORDING = true
-
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.width
+        height = Configuration.height
     }
 
     program {
@@ -40,9 +36,9 @@ fun main() = application {
         val bgColor = ColorRGBa.fromHex(0x353A47)
 
         val tileSize = TILE_SIZE.toDouble()
-        val videoTarget = renderTarget(WIDTH, HEIGHT) { colorBuffer() }
+        val videoTarget = renderTarget(Configuration.width, Configuration.height) { colorBuffer() }
         val videoWriter = VideoWriter.create()
-                .size(WIDTH, HEIGHT)
+                .size(Configuration.width, Configuration.height)
                 .frameRate(60)
                 .output("video/TruchetTiles.mp4")
                 .start()
@@ -62,8 +58,8 @@ fun main() = application {
                 ).random()
         )
 
-        val rotations = Array(HEIGHT / TILE_SIZE) {
-            Array(WIDTH / TILE_SIZE) {
+        val rotations = Array(Configuration.height / TILE_SIZE) {
+            Array(Configuration.width / TILE_SIZE) {
                 RotationSequence(Random.nextInt(4) * 90)
             }
         }
@@ -74,7 +70,7 @@ fun main() = application {
                 drawer.background(bgColor)
             }
 
-            //if (RECORDING) {
+            //if (Configuration.Recording) {
             //    post(FrameBlur())
             //}
 
@@ -93,8 +89,8 @@ fun main() = application {
                         Ease.EXP_INOUT((frameProgress - 0.5) * 2) / 2 + 0.5
                     }
 
-                    for (row in 0 until HEIGHT / TILE_SIZE) {
-                        for (col in 0 until WIDTH / TILE_SIZE) {
+                    for (row in 0 until Configuration.height / TILE_SIZE) {
+                        for (col in 0 until Configuration.width / TILE_SIZE) {
 
                             val x = col * tileSize
                             val y = row * tileSize
@@ -124,7 +120,7 @@ fun main() = application {
         }
 
         extend {
-            if (RECORDING) {
+            if (Configuration.recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()
