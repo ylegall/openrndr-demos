@@ -25,8 +25,6 @@ private const val C = 8.0/3
 
 private const val DT = 0.1
 
-private const val WIDTH = 800
-private const val HEIGHT = WIDTH
 private const val STREAK_LENGTH = 128
 private const val SPEED = 3
 
@@ -39,8 +37,8 @@ private data class MutablePoint3D(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     var streakLength = 2
@@ -100,8 +98,9 @@ fun main() = application {
                     randomColorRGBa(a = 1.0)
             )
         }
-
-        extend(ScreenRecorder())
+        if(Configuration.Recording) {
+            extend(ScreenRecorder())
+        }
         extend {
 
             elapsed += deltaTime

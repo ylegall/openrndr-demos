@@ -17,8 +17,6 @@ import org.ygl.openrndr.utils.isolatedWithTarget
 import org.ygl.openrndr.utils.rect
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val START_POINTS = 7
 private const val START_SIZE = 27
 
@@ -30,8 +28,8 @@ private const val INITIAL_DB = 0.156 //
 
 fun main() = application {
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {

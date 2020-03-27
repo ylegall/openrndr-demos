@@ -19,8 +19,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
+
 private const val BORDER = 40
 private const val TOTAL_FRAMES = 360
 private const val ROWS = 48
@@ -29,13 +28,12 @@ private const val MAX_OFFSET = 20.0
 private const val SEED1 = 72346
 private const val SEED2 = 12987
 
-private const val RECORDING = false
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     val noise = FastNoise()
@@ -53,9 +51,9 @@ fun main() = application {
     )
 
     val points = List(ROWS) { row ->
-        val y = BORDER + row * ((HEIGHT - BORDER) / ROWS)
+        val y = BORDER + row * ((Configuration.Height - BORDER) / ROWS)
         List(COLS) { col ->
-            val x = BORDER + col * ((WIDTH - BORDER) / COLS)
+            val x = BORDER + col * ((Configuration.Width - BORDER) / COLS)
             Leaf(
                     pos = vector2(
                             x + Random.nextDouble(-MAX_OFFSET/2, MAX_OFFSET/2),
@@ -119,12 +117,12 @@ fun main() = application {
                 }
 
             }
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 post(FrameBlur())
             }
         }
 
-        if (RECORDING) {
+        if (Configuration.Recording) {
             extend(ScreenRecorder()) {
                 outputFile = "video1/ocean-grass.mp4"
                 frameRate = 60
@@ -140,7 +138,7 @@ fun main() = application {
         extend {
             composite.draw(drawer)
 
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 if (frameCount >= TOTAL_FRAMES) {
                     application.exit()
                 }

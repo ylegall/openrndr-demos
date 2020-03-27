@@ -25,8 +25,8 @@ private const val SPEED = 1.0
 fun main() = application {
 
     configure {
-        width = 800
-        height = 800
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     class MutableLineSegment(

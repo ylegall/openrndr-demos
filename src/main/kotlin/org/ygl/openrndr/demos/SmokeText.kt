@@ -18,8 +18,6 @@ import org.ygl.openrndr.utils.isolatedWithTarget
 import org.ygl.openrndr.utils.vector2
 import kotlin.random.Random
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val PAUSE_FRAMES = 180
 private const val TOTAL_FRAMES = 480
 private const val SEED = 415
@@ -27,8 +25,8 @@ private const val SEED = 415
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {

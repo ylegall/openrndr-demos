@@ -21,8 +21,7 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sin
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
+
 private const val BOTTOM_BORDER = 0
 private const val TOTAL_FRAMES = 360
 
@@ -32,8 +31,8 @@ private const val PATH_POINTS = 512
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {
@@ -95,7 +94,7 @@ fun main() = application {
 
                     for (i in 0 until PATH_POINTS) {
                         val pathProgress = (i / PATH_POINTS.toDouble())
-                        val y = pathProgress.rangeMap(0, 1, startY, HEIGHT - BOTTOM_BORDER)
+                        val y = pathProgress.rangeMap(0, 1, startY, Configuration.Height - BOTTOM_BORDER)
                         val x = adjustedX + pathProgress * xProgress.rangeMap(0, 1, -60, 60)
 
                         val noiseAngle = (2 * PI * (pathProgress - timeProgress))
@@ -122,11 +121,12 @@ fun main() = application {
                 }
             }
         }
-
-        // extend(ScreenRecorder()) {
-        //     frameRate = 60
-        //     frameClock = true
-        // }
+        if(Configuration.Recording) {
+            extend(ScreenRecorder()) {
+                frameRate = 60
+                frameClock = true
+            }
+        }
 
         extend(GUI()) {
             add(parameters)

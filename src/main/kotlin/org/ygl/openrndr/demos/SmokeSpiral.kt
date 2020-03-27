@@ -23,8 +23,6 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val PI_2 = PI / 2
 private const val TOTAL_FRAMES = 360
 private const val FRAME_SPEED = 0.5
@@ -36,7 +34,7 @@ private fun getSpiralPoint(
         curvature: Double
 ): Vector2 {
     val angle = PI_2 * progress.pow(0.7) * curvature
-    val radius = WIDTH/2.0 * progress * sqrt(progress)
+    val radius = Configuration.Width/2.0 * progress * sqrt(progress)
     return Vector2(radius * cos(angle), radius * sin(angle))
 }
 
@@ -44,8 +42,8 @@ private fun getSpiralPoint(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {
@@ -65,7 +63,7 @@ fun main() = application {
                 val curveProgress = (i / POINTS.toDouble())
                 val p1 = getSpiralPoint(curveProgress, curvature)
                 val p2 = p1 * -1.0
-                val dist = p1.length / (WIDTH / 1.5)
+                val dist = p1.length / (Configuration.Width / 1.5)
                 val distortion = 18 * curveProgress * dist
                 val maxDelta = dist * 29
                 val dx1 = maxDelta * simplexNoise2D(seed * 1, curveProgress, timeOffset = timeProgress, radius = distortion)

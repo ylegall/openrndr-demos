@@ -15,6 +15,7 @@ import org.openrndr.ffmpeg.VideoWriter
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Rectangle
 import org.ygl.fastnoise.FastNoise
+import org.ygl.openrndr.demos.Configuration
 import org.ygl.openrndr.demos.util.RingBuffer
 import org.ygl.openrndr.utils.ColorMap
 import org.ygl.openrndr.utils.mvector
@@ -26,19 +27,17 @@ import kotlin.math.round
 import kotlin.math.sin
 import kotlin.random.Random
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
+
 private const val PARTICLES = 100
 private const val TOTAL_FRAMES = 360
 //private const val DELAY_FRAMES = 180
 
-private const val RECORDING = true
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {
@@ -94,7 +93,7 @@ fun main() = application {
                     noise.seed = 1982
                     val noiseY = noise.getSimplex(params.scale * x, params.scale * y)
 
-                    val outwardForce = mvector(x - WIDTH /2, y - HEIGHT /2)
+                    val outwardForce = mvector(x - Configuration.Width /2, y - Configuration.Height /2)
                     outwardForce.normalize()
                     outwardForce *= 0.4
 
@@ -142,7 +141,7 @@ fun main() = application {
 
         val particles = Rectangle(0.0, 0.0, 200.0, 200.0).shape.outline
                 .equidistantPositions(PARTICLES)
-                .map { Particle(vector2(WIDTH /2 - 100 + it.x, HEIGHT /2 - 100 + it.y)) }
+                .map { Particle(vector2(Configuration.Width /2 - 100 + it.x, Configuration.Height /2 - 100 + it.y)) }
 
         //val particles = List(PARTICLES) { idx ->
         //    val angle = 2 * PI * (idx / PARTICLES.toDouble())
@@ -168,7 +167,7 @@ fun main() = application {
                     particles.forEach { it.reset() }
                 }
             }
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 post(GaussianBloom())
             //    post(FrameBlur())
             }
@@ -179,7 +178,7 @@ fun main() = application {
         //}
 
         extend {
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 if (frameCount > TOTAL_FRAMES) {
                     videoWriter.stop()
                     application.exit()

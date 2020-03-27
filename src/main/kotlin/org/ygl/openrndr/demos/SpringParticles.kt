@@ -6,23 +6,21 @@ import org.ygl.openrndr.utils.MutableVector2
 import org.ygl.openrndr.utils.color
 import org.ygl.openrndr.utils.mvector
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val SPRING = 0.07
 private const val DAMPING = 0.93
 private const val FORCE_FACTOR = 87.0
 private const val PARTICLE_SIZE = 16
 private const val RADIUS = PARTICLE_SIZE / 2.0 + 3.0
-private const val WIDTH_IN_PARTICLES = WIDTH / PARTICLE_SIZE
 
 
 fun main() = application {
 
     configure {
         title = "Spring Particles"
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
+    val WIDTH_IN_PARTICLES = Configuration.Width / PARTICLE_SIZE
 
     val mouseForce = mvector(0, 0)
     val anchorForce = mvector(0, 0)
@@ -52,8 +50,8 @@ fun main() = application {
             velocity += anchorForce
             velocity *= DAMPING
             position += velocity
-            position.x = position.x.coerceIn(0.0, WIDTH.toDouble())
-            position.y = position.y.coerceIn(0.0, HEIGHT.toDouble())
+            position.x = position.x.coerceIn(0.0, Configuration.Width.toDouble())
+            position.y = position.y.coerceIn(0.0, Configuration.Height.toDouble())
         }
     }
 
@@ -61,7 +59,7 @@ fun main() = application {
         val bgColor = color(32, 64, 127)
         val particleColor = color(32, 213, 127)
         var mousePosition: Vector2? = null
-        val particles = Array(WIDTH_IN_PARTICLES * HEIGHT / PARTICLE_SIZE) {
+        val particles = Array(WIDTH_IN_PARTICLES * Configuration.Height / PARTICLE_SIZE) {
             Particle(
                     (it % WIDTH_IN_PARTICLES) * PARTICLE_SIZE + PARTICLE_SIZE/2,
                     (it / WIDTH_IN_PARTICLES) * PARTICLE_SIZE + PARTICLE_SIZE/2

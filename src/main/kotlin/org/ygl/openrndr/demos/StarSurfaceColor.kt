@@ -14,8 +14,6 @@ import org.ygl.openrndr.utils.MutableVector2
 import org.ygl.openrndr.utils.vector2
 import kotlin.math.round
 
-private const val WIDTH = 600
-private const val HEIGHT = 600
 private const val GRID_SIZE = 300
 private const val TOTAL_FRAMES = 300
 
@@ -51,8 +49,8 @@ private fun getFieldVector(
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {

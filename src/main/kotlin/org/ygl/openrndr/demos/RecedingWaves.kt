@@ -21,30 +21,30 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
+
 private const val LAYERS = 180
 private const val POINTS_PER_LAYER = 200
 private const val LAYER_BORDER = 30
-private const val MIN_LAYER_WIDTH = WIDTH / 2 - 2 * LAYER_BORDER
-private const val MAX_LAYER_WIDTH = WIDTH - 2 * LAYER_BORDER
-private const val MIN_LAYER_HEIGHT = LAYER_BORDER
-private const val MAX_LAYER_HEIGHT = HEIGHT
+
 private const val NOISE_MAGNITUDE = 331
 private const val NOISE_SCALE = 1.8
 private const val NOISE_RADIUS = 100.0
 
 private const val TOTAL_FRAMES = 360
-private const val RECORDING = true
 private const val FRAME_DELAY = 120
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
+    val MIN_LAYER_WIDTH = Configuration.Width / 2 - 2 * LAYER_BORDER
+    val MAX_LAYER_WIDTH = Configuration.Width - 2 * LAYER_BORDER
+    val MIN_LAYER_HEIGHT = LAYER_BORDER
+    val MAX_LAYER_HEIGHT = Configuration.Height
+    
     program {
 
         val noise = FastNoise()
@@ -78,7 +78,7 @@ fun main() = application {
                     val perspectiveProgress = layerProgress.pow(2)
                     val widthProgress = perspectiveProgress * (MAX_LAYER_WIDTH - MIN_LAYER_WIDTH)
                     val layerWidth = MIN_LAYER_WIDTH + widthProgress
-                    val xOffset = (WIDTH - MIN_LAYER_WIDTH) / 2.0
+                    val xOffset = (Configuration.Width - MIN_LAYER_WIDTH) / 2.0
                     val startX = xOffset - widthProgress / 2.0
 
                     val y = MIN_LAYER_HEIGHT + (MAX_LAYER_HEIGHT - MIN_LAYER_HEIGHT) * perspectiveProgress
@@ -119,7 +119,7 @@ fun main() = application {
                     drawer.contour(curve)
                 }
             }
-            if (RECORDING) { post(FrameBlur()) }
+            if (Configuration.Recording) { post(FrameBlur()) }
         }
 
 //        extend(ScreenRecorder()) {
@@ -128,7 +128,7 @@ fun main() = application {
 //        }
 
         extend {
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 drawer.isolatedWithTarget(videoTarget) {
                     composite.draw(drawer)
                 }

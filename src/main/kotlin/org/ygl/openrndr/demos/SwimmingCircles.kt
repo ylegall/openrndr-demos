@@ -26,9 +26,6 @@ import org.ygl.openrndr.utils.rotate
 import org.ygl.openrndr.utils.vector2
 import kotlin.math.abs
 
-
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val SPEED = 1.0
 private const val ROWS = 16
 private const val ROWS_2 = ROWS / 2
@@ -37,8 +34,8 @@ private const val GAP = 42
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     val bgColor1 = ColorRGBa.fromHex(0x292e53)

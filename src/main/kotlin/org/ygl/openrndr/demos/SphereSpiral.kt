@@ -20,19 +20,15 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-private const val WIDTH = 640
-private const val HEIGHT = 640
 private const val POINTS = 2048
 private const val TOTAL_FRAMES = 420
 private const val DELAY_FRAMES = TOTAL_FRAMES / 2
 
-private const val RECORDING = true
-
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {
@@ -109,7 +105,7 @@ fun main() = application {
                 drawCurve(time, flip = false)
                 drawCurve(time, flip = true)
             }
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 post(GaussianBloom())
                 post(FrameBlur())
             }
@@ -117,7 +113,7 @@ fun main() = application {
 
         extend(camera)
         extend {
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

@@ -29,21 +29,18 @@ import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
 
-private const val WIDTH = 920
-private const val HEIGHT = 920
+
 private const val TOTAL_FRAMES = 360
 private const val DELAY_FRAMES = TOTAL_FRAMES / 4
 
 private const val LAYERS = 100
 private const val SHAPE_POINTS = 192
 
-private const val RECORDING = false
-
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     program {
@@ -158,7 +155,7 @@ fun main() = application {
                 }
             }
 
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 post(FrameBlur())
             }
         }
@@ -170,7 +167,7 @@ fun main() = application {
         //}
 
         extend {
-            if (RECORDING) {
+            if (Configuration.Recording) {
                 if (frameCount >= TOTAL_FRAMES + DELAY_FRAMES) {
                     videoWriter.stop()
                     application.exit()

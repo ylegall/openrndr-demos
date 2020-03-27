@@ -19,16 +19,14 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 
-private const val WIDTH = 800
-private const val HEIGHT = 800
 private const val RINGS = 12
 private const val TOTAL_FRAMES = 420
 
 fun main() = application {
 
     configure {
-        width = WIDTH
-        height = HEIGHT
+        width = Configuration.Width
+        height = Configuration.Height
     }
 
     val bgColor = ColorRGBa.fromHex(0x375267)
